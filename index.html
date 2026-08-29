@@ -217,6 +217,11 @@ nav.bottom button svg{ width:19px; height:19px; }
         </select>
       </div>
     </div>
+    <div class="field">
+      <label>Güncel Piyasa Değeri (₺) — opsiyonel</label>
+      <input type="number" id="f_marketvalue" placeholder="Boş bırakırsan kaba tahmin gösterilir">
+    </div>
+    <div class="hint">Bu modelin gerçek güncel değerini biliyorsan (eBay, hobiDB, ilan sitelerinden) buraya yaz — uygulama her zaman bunu formül tahminine tercih eder.</div>
 
     <button class="btn" id="saveBtn" onclick="saveCustom()">Kaydet</button>
   </div>
@@ -323,6 +328,505 @@ const DATABASE = [
   {brand:"Majorette", name:"Ferrari 488 GTB", series:"Majorette Deluxe Cars"},
   {brand:"Mini GT", name:"Toyota GR Supra", series:"Mini GT JDM"},
   {brand:"Mini GT", name:"Lamborghini Huracán", series:"Mini GT Sport"},
+
+  {brand:"Hot Wheels", name:"Nissan Silvia S15", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Nissan 240SX (S13)", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Mitsubishi Lancer Evolution", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Toyota AE86 Sprinter Trueno", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Honda S2000", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Subaru Impreza WRX STI", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Mazda RX-3", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"'71 El Camino", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'69 Dodge Charger Daytona", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'70 Chevelle SS", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'71 Mustang Mach 1", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'70 Plymouth Barracuda", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'65 Chevy Impala", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"'40 Ford Coupe", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"'56 Ford Truck", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"'83 Chevy Silverado", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"Ford F-150 Raptor", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"Chevrolet Camaro ZL1", series:"HW Speed Graphics"},
+  {brand:"Hot Wheels", name:"Ferrari 458 Italia", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Ferrari F40", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Porsche 918 Spyder", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Bugatti Chiron", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Aston Martin DB5", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Koenigsegg Jesko", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Rimac Nevera", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Tesla Model S", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Tesla Roadster", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Rivian R1T", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Lamborghini Aventador", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Lamborghini Sián", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"McLaren P1", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"McLaren 720S", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Pagani Huayra", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Ford GT (2017)", series:"HW Speed Graphics"},
+  {brand:"Hot Wheels", name:"Shelby Cobra 427 S/C", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"'32 Ford Delivery", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"Sand Van", series:"HW Art Cars"},
+  {brand:"Hot Wheels", name:"Fast Fish", series:"HW Art Cars"},
+  {brand:"Hot Wheels", name:"Rocket Box", series:"HW Art Cars"},
+  {brand:"Hot Wheels", name:"Purple Passion", series:"HW Art Cars"},
+  {brand:"Hot Wheels", name:"Sharkruiser", series:"HW Art Cars"},
+  {brand:"Hot Wheels", name:"Sky Show Hot Rod", series:"HW Art Cars"},
+  {brand:"Hot Wheels", name:"Baja Bone Shaker", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Jeep CJ-7", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Land Rover Defender 110", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Toyota Land Cruiser (FJ40)", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Ford Bronco", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Volkswagen Beetle", series:"HW City"},
+  {brand:"Hot Wheels", name:"Volkswagen Golf MK1", series:"HW Turbo"},
+  {brand:"Hot Wheels", name:"Audi Quattro", series:"HW Turbo"},
+  {brand:"Hot Wheels", name:"Peugeot 205 Turbo 16", series:"HW Turbo"},
+  {brand:"Hot Wheels", name:"Fiat 131 Abarth", series:"HW Turbo"},
+  {brand:"Hot Wheels", name:"Lancia Delta HF Integrale", series:"HW Turbo"},
+  {brand:"Hot Wheels", name:"Star Wars X-Wing Starfighter", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Back to the Future Time Machine", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Knight Rider K.I.T.T.", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Scooby-Doo Mystery Machine", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Jurassic Park Jeep Wrangler", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Minions Movie Van", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"James Bond Aston Martin DB5", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Mario Kart Standard Kart Pink", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Luigi Kart", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Bowser Kart", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Monster Truck Bone Shaker", series:"HW Monster Trucks"},
+  {brand:"Hot Wheels", name:"Gunkster Monster Truck", series:"HW Monster Trucks"},
+  {brand:"Hot Wheels", name:"Tiger Shark Monster Truck", series:"HW Monster Trucks"},
+
+  {brand:"Matchbox", name:"Volkswagen Type 2 Bus", series:"MBX Vintage"},
+  {brand:"Matchbox", name:"MB Fire Engine", series:"MBX Rescue"},
+  {brand:"Matchbox", name:"Chevrolet Corvette Stingray", series:"MBX Metro"},
+  {brand:"Matchbox", name:"Ford Mustang Fastback", series:"MBX Metro"},
+  {brand:"Matchbox", name:"Toyota Land Cruiser", series:"MBX Off-Road"},
+  {brand:"Matchbox", name:"Ford F-150", series:"MBX Highway"},
+  {brand:"Matchbox", name:"Range Rover Sport", series:"MBX Off-Road"},
+  {brand:"Matchbox", name:"Tesla Model 3", series:"MBX Electric"},
+  {brand:"Matchbox", name:"BMW i8", series:"MBX Electric"},
+  {brand:"Matchbox", name:"MBX Excavator", series:"MBX Construction"},
+  {brand:"Matchbox", name:"MBX Ambulance", series:"MBX Rescue"},
+
+  {brand:"Tomica", name:"Toyota Land Cruiser", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Nissan Fairlady Z", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Honda NSX", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Toyota Alphard", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Suzuki Jimny", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Mazda Roadster (MX-5)", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Nissan Skyline GT-R (R32)", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Toyota Century", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Shinkansen N700S", series:"Tomica Hyper Rescue"},
+
+  {brand:"Majorette", name:"Volkswagen Golf GTI", series:"Majorette Deluxe Cars"},
+  {brand:"Majorette", name:"Mercedes-Benz AMG GT", series:"Majorette Deluxe Cars"},
+  {brand:"Majorette", name:"Porsche 911 GT3 Cup", series:"Majorette Deluxe Cars"},
+  {brand:"Majorette", name:"Renault Mégane R.S.", series:"Majorette City"},
+  {brand:"Majorette", name:"Land Rover Defender", series:"Majorette Off-Road"},
+
+  {brand:"Mini GT", name:"Nissan Skyline GT-R (R34) Nismo", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Toyota AE86 Trueno", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Mazda RX-7 FD3S", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Porsche 911 GT3 RS", series:"Mini GT Sport"},
+  {brand:"Mini GT", name:"Ford Mustang Shelby GT500", series:"Mini GT Sport"},
+  {brand:"Mini GT", name:"Bugatti Divo", series:"Mini GT Sport"},
+
+  {brand:"Johnny Lightning", name:"'69 Camaro Z/28", series:"JL Muscle Cars USA"},
+  {brand:"Johnny Lightning", name:"'70 Plymouth Superbird", series:"JL Muscle Cars USA"},
+  {brand:"Johnny Lightning", name:"'65 Ford Mustang", series:"JL Classic Gold"},
+  {brand:"Johnny Lightning", name:"DeLorean DMC-12", series:"JL Pop Culture"},
+  {brand:"Johnny Lightning", name:"'59 Cadillac Ambulance", series:"JL Classic Gold"},
+
+  {brand:"Greenlight", name:"'68 Chevrolet C-10", series:"GL Muscle"},
+  {brand:"Greenlight", name:"Ford Bronco (1980)", series:"GL All-Terrain"},
+  {brand:"Greenlight", name:"'77 Ford F-250", series:"GL Dually Drivers"},
+  {brand:"Greenlight", name:"Jeep Wrangler JL", series:"GL All-Terrain"},
+  {brand:"Greenlight", name:"'69 Dodge Charger R/T", series:"GL Muscle"},
+
+  {brand:"M2 Machines", name:"'32 Ford Coupe", series:"M2 Auto-Thentics"},
+  {brand:"M2 Machines", name:"'55 Chevy 3100 Truck", series:"M2 Auto-Trucks"},
+  {brand:"M2 Machines", name:"'67 Camaro RS", series:"M2 Detroit-Muscle"},
+  {brand:"M2 Machines", name:"'70 Plymouth Road Runner", series:"M2 Detroit-Muscle"},
+
+  {brand:"Hot Wheels", name:"Nissan Skyline GT-R (R33)", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Nissan Skyline GT-R (R32)", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Toyota Celica GT-Four", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Honda Civic Si", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Mazda Furai", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"'18 Dodge Challenger SRT Demon", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'20 Ford Mustang Shelby GT500", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"Chevrolet Camaro SS (2010)", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'71 Buick Riviera", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"'49 Ford Woody Wagon", series:"HW Wagons"},
+  {brand:"Hot Wheels", name:"'71 El Camino SS", series:"HW Wagons"},
+  {brand:"Hot Wheels", name:"Datsun Bluebird 510 Wagon", series:"HW Wagons"},
+  {brand:"Hot Wheels", name:"BMW M5 Touring", series:"HW Wagons"},
+  {brand:"Hot Wheels", name:"Audi RS4 Avant", series:"HW Wagons"},
+  {brand:"Hot Wheels", name:"Volvo 850 Estate", series:"HW Wagons"},
+  {brand:"Hot Wheels", name:"'55 Chevy Nomad", series:"HW Wagons"},
+  {brand:"Hot Wheels", name:"Formula 1 Race Car", series:"HW Race Day"},
+  {brand:"Hot Wheels", name:"NASCAR Chevrolet Camaro", series:"HW Race Day"},
+  {brand:"Hot Wheels", name:"Indy 500 Oval Racer", series:"HW Race Day"},
+  {brand:"Hot Wheels", name:"Rally Subaru WRX", series:"HW Race Day"},
+  {brand:"Hot Wheels", name:"Le Mans Porsche 917", series:"HW Race Day"},
+  {brand:"Hot Wheels", name:"Ford GT40 Mk II Le Mans", series:"HW Race Day"},
+  {brand:"Hot Wheels", name:"Baja Truck", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Toyota Tacoma TRD", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Ford Raptor R", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Unimog", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Power Wagon", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Ford Transit Van", series:"HW City"},
+  {brand:"Hot Wheels", name:"Mercedes-Benz Sprinter Van", series:"HW City"},
+  {brand:"Hot Wheels", name:"Rescue Ambulance", series:"HW Rescue"},
+  {brand:"Hot Wheels", name:"Fire Eater Fire Truck", series:"HW Rescue"},
+  {brand:"Hot Wheels", name:"Police Cruiser", series:"HW Rescue"},
+  {brand:"Hot Wheels", name:"SWAT Truck", series:"HW Rescue"},
+  {brand:"Hot Wheels", name:"Airport Fire Truck", series:"HW Rescue"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Ghostbusters ECTO-1", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Retro Entertainment The A-Team Van", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Dukes of Hazzard General Lee", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Batman Batmobile 1966", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Car Culture Datsun 240Z", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Car Culture Toyota Sprinter Trueno", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Car Culture Nissan Laurel", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Car Culture Honda City Turbo", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Team Transport BMW M3 + Trailer", series:"HW Team Transport"},
+  {brand:"Hot Wheels", name:"Team Transport Porsche 911 + Trailer", series:"HW Team Transport"},
+  {brand:"Hot Wheels", name:"Boulevard Chevrolet Chevelle", series:"HW Boulevard"},
+  {brand:"Hot Wheels", name:"Boulevard Ford Falcon", series:"HW Boulevard"},
+
+  {brand:"Matchbox", name:"Land Rover Series III", series:"MBX Vintage"},
+  {brand:"Matchbox", name:"Volvo P1800", series:"MBX Vintage"},
+  {brand:"Matchbox", name:"Datsun 260Z", series:"MBX Vintage"},
+  {brand:"Matchbox", name:"BMW 2002", series:"MBX Vintage"},
+  {brand:"Matchbox", name:"Peterbilt Truck", series:"MBX Highway"},
+  {brand:"Matchbox", name:"School Bus", series:"MBX City"},
+  {brand:"Matchbox", name:"NYC Taxi", series:"MBX City"},
+  {brand:"Matchbox", name:"London Double Decker Bus", series:"MBX City"},
+  {brand:"Matchbox", name:"MBX Bulldozer", series:"MBX Construction"},
+  {brand:"Matchbox", name:"MBX Crane Truck", series:"MBX Construction"},
+  {brand:"Matchbox", name:"MBX Police Helicopter", series:"MBX Rescue"},
+  {brand:"Matchbox", name:"MBX Lifeboat", series:"MBX Rescue"},
+
+  {brand:"Tomica", name:"Toyota Prius", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Honda Vezel", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Nissan Note", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Mitsubishi Delica", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Toyota Supra A80", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Honda Integra Type R", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Mazda Cosmo Sport", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Toyota 2000GT", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Ambulance", series:"Tomica Hyper Rescue"},
+  {brand:"Tomica", name:"Fire Ladder Truck", series:"Tomica Hyper Rescue"},
+
+  {brand:"Majorette", name:"Peugeot 208 GTi", series:"Majorette Deluxe Cars"},
+  {brand:"Majorette", name:"Citroën 2CV", series:"Majorette Vintage"},
+  {brand:"Majorette", name:"Renault 4L", series:"Majorette Vintage"},
+  {brand:"Majorette", name:"Toyota Hilux", series:"Majorette Off-Road"},
+  {brand:"Majorette", name:"Nissan GT-R", series:"Majorette Deluxe Cars"},
+  {brand:"Majorette", name:"Aston Martin Vantage", series:"Majorette Deluxe Cars"},
+  {brand:"Majorette", name:"Scania Truck", series:"Majorette Trucks"},
+
+  {brand:"Mini GT", name:"Datsun Fairlady 240Z", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Toyota 2000GT", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Mazda Savanna RX-7", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Nissan Silvia S15", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Toyota Land Cruiser 70", series:"Mini GT Off-Road"},
+  {brand:"Mini GT", name:"Land Rover Defender 90", series:"Mini GT Off-Road"},
+  {brand:"Mini GT", name:"Porsche 911 Turbo S", series:"Mini GT Sport"},
+  {brand:"Mini GT", name:"McLaren Senna", series:"Mini GT Sport"},
+  {brand:"Mini GT", name:"Koenigsegg Regera", series:"Mini GT Sport"},
+
+  {brand:"Johnny Lightning", name:"'57 Chevy Bel Air", series:"JL Classic Gold"},
+  {brand:"Johnny Lightning", name:"'32 Ford Roadster", series:"JL Street Freaks"},
+  {brand:"Johnny Lightning", name:"Knight Rider K.I.T.T.", series:"JL Pop Culture"},
+  {brand:"Johnny Lightning", name:"Ecto-1 Ghostbusters", series:"JL Pop Culture"},
+  {brand:"Johnny Lightning", name:"'69 Camaro Indy Pace Car", series:"JL Muscle Cars USA"},
+
+  {brand:"Greenlight", name:"'92 Ford Mustang LX", series:"GL Muscle"},
+  {brand:"Greenlight", name:"Chevrolet K-5 Blazer", series:"GL All-Terrain"},
+  {brand:"Greenlight", name:"'71 Jeep CJ-5", series:"GL All-Terrain"},
+  {brand:"Greenlight", name:"Ford Crown Victoria Police", series:"GL Hot Pursuit"},
+  {brand:"Greenlight", name:"Chevrolet Camaro Police", series:"GL Hot Pursuit"},
+
+  {brand:"M2 Machines", name:"'69 Chevrolet Camaro Z/28", series:"M2 Detroit-Muscle"},
+  {brand:"M2 Machines", name:"'65 Ford Mustang Fastback", series:"M2 Detroit-Muscle"},
+  {brand:"M2 Machines", name:"'59 Cadillac Eldorado", series:"M2 Auto-Thentics"},
+  {brand:"M2 Machines", name:"Kawasaki Motorcycle", series:"M2 Auto-Lifts"},
+
+  {brand:"Inno64", name:"Nissan Skyline GT-R (R34) V-Spec II", series:"Inno64 JDM"},
+  {brand:"Inno64", name:"Toyota Supra A80 RZ", series:"Inno64 JDM"},
+  {brand:"Inno64", name:"Honda Civic EG6", series:"Inno64 JDM"},
+  {brand:"Inno64", name:"Mazda RX-7 FD3S Veilside", series:"Inno64 JDM"},
+  {brand:"Inno64", name:"Nissan Silvia S13", series:"Inno64 JDM"},
+  {brand:"Inno64", name:"Honda NSX Type R", series:"Inno64 JDM"},
+
+  {brand:"Tarmac Works", name:"Nissan Skyline GT-R (R34)", series:"Tarmac Works Global64"},
+  {brand:"Tarmac Works", name:"Toyota GR Yaris", series:"Tarmac Works Global64"},
+  {brand:"Tarmac Works", name:"Porsche 911 GT3 RS", series:"Tarmac Works Global64"},
+  {brand:"Tarmac Works", name:"Honda Civic Type R FK8", series:"Tarmac Works Global64"},
+  {brand:"Tarmac Works", name:"Lamborghini Countach LP400", series:"Tarmac Works Global64"},
+
+  {brand:"CM Model", name:"Nissan Skyline GT-R (R32) Nismo", series:"CM Model JDM"},
+  {brand:"CM Model", name:"Toyota Supra A70", series:"CM Model JDM"},
+  {brand:"CM Model", name:"Mazda RX-7 FC3S", series:"CM Model JDM"},
+
+  {brand:"Kyosho", name:"Nissan GT-R Nismo", series:"Kyosho Original"},
+  {brand:"Kyosho", name:"Mazda Roadster RF", series:"Kyosho Original"},
+  {brand:"Kyosho", name:"Subaru WRX STI S207", series:"Kyosho Original"},
+
+  {brand:"Hot Wheels", name:"Toyota Corolla Levin AE86", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Nissan 300ZX", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Toyota Chaser JZX100", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Nissan Skyline 2000GT-R (Hakosuka)", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Mazda RX-8", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Subaru BRZ", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Toyota GT86", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Honda Beat", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Suzuki Cappuccino", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"'69 Ford Torino", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'68 Chevrolet Nova", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'70 Pontiac GTO", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'67 Pontiac Firebird", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'66 Chevrolet Chevy II", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"AMC Javelin", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'71 AMC Gremlin", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"'55 Chevy Cameo", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"Dodge Ram 1500", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"GMC Syclone", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"Chevrolet El Camino SS", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"Mercedes-Benz 300 SL", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Jaguar E-Type", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Alfa Romeo Giulia GTA", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Maserati GranTurismo", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Ferrari Testarossa", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Ferrari Enzo", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Lamborghini Diablo", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Lamborghini Miura", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Porsche 356", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Porsche 968", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Porsche Taycan", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Audi e-tron GT", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Hyundai Ioniq 5", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Lucid Air", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"'55 Chevy Gasser", series:"HW Drag Strip"},
+  {brand:"Hot Wheels", name:"Dodge Dart Funny Car", series:"HW Drag Strip"},
+  {brand:"Hot Wheels", name:"'41 Willys Gasser", series:"HW Drag Strip"},
+  {brand:"Hot Wheels", name:"Vega Bomb Funny Car", series:"HW Drag Strip"},
+  {brand:"Hot Wheels", name:"Toyota Hilux Baja", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Ford Bronco R Baja", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Can-Am Maverick", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Polaris RZR", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"School Bus", series:"HW City"},
+  {brand:"Hot Wheels", name:"City Works Loader", series:"HW City"},
+  {brand:"Hot Wheels", name:"Garbage Truck", series:"HW City"},
+  {brand:"Hot Wheels", name:"Cement Mixer", series:"HW City"},
+  {brand:"Hot Wheels", name:"Tow Truck", series:"HW Rescue"},
+  {brand:"Hot Wheels", name:"Coast Guard Boat", series:"HW Rescue"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Speed Racer Mach 5", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Herbie the Love Bug", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Jurassic World Jeep", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Transformers Bumblebee", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Car Culture Datsun 510 Wagon", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Car Culture Mazda RX-3", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Car Culture Toyota Crown", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Car Culture Nissan Cedric", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Team Transport Ford GT + Trailer", series:"HW Team Transport"},
+  {brand:"Hot Wheels", name:"Team Transport Chevrolet Corvette + Trailer", series:"HW Team Transport"},
+  {brand:"Hot Wheels", name:"Boulevard Datsun 620", series:"HW Boulevard"},
+  {brand:"Hot Wheels", name:"Boulevard Volkswagen Type 3", series:"HW Boulevard"},
+  {brand:"Hot Wheels", name:"Mario Kart Yoshi Kart", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Mario Kart Peach Kart", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Minecraft Creeper Vehicle", series:"HW Pop Culture"},
+  {brand:"Hot Wheels", name:"Pixar Cars Lightning McQueen", series:"HW Pop Culture"},
+
+  {brand:"Matchbox", name:"Mercedes-Benz Unimog", series:"MBX Off-Road"},
+  {brand:"Matchbox", name:"Jeep Gladiator", series:"MBX Off-Road"},
+  {brand:"Matchbox", name:"Chevrolet Camaro SS", series:"MBX Metro"},
+  {brand:"Matchbox", name:"Dodge Challenger R/T", series:"MBX Metro"},
+  {brand:"Matchbox", name:"MBX Tractor", series:"MBX Farm"},
+  {brand:"Matchbox", name:"MBX Combine Harvester", series:"MBX Farm"},
+  {brand:"Matchbox", name:"MBX Cargo Plane", series:"MBX Sky Busters"},
+  {brand:"Matchbox", name:"MBX Coast Guard Helicopter", series:"MBX Sky Busters"},
+
+  {brand:"Tomica", name:"Toyota GR86", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Nissan Ariya", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Honda N-BOX", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Mazda CX-5", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Lexus LC500", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Nissan Fairlady Z432", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Police Patrol Car", series:"Tomica Hyper Rescue"},
+  {brand:"Tomica", name:"Highway Patrol Bike", series:"Tomica Hyper Rescue"},
+
+  {brand:"Majorette", name:"Volkswagen Transporter T3", series:"Majorette Vintage"},
+  {brand:"Majorette", name:"Fiat 500", series:"Majorette Vintage"},
+  {brand:"Majorette", name:"Mercedes-Benz G-Class", series:"Majorette Off-Road"},
+  {brand:"Majorette", name:"Ford Ranger Raptor", series:"Majorette Off-Road"},
+  {brand:"Majorette", name:"Man Fire Truck", series:"Majorette Trucks"},
+
+  {brand:"Mini GT", name:"Nissan Fairlady Z (2023)", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Toyota Century", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Honda Civic Type R FL5", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Ferrari Daytona SP3", series:"Mini GT Sport"},
+  {brand:"Mini GT", name:"Aston Martin Valkyrie", series:"Mini GT Sport"},
+  {brand:"Mini GT", name:"Pagani Utopia", series:"Mini GT Sport"},
+
+  {brand:"Johnny Lightning", name:"'70 Dodge Coronet Super Bee", series:"JL Muscle Cars USA"},
+  {brand:"Johnny Lightning", name:"'55 Chevy Bel Air Gasser", series:"JL Street Freaks"},
+  {brand:"Johnny Lightning", name:"White Lightning '32 Ford", series:"JL Street Freaks"},
+
+  {brand:"Greenlight", name:"'19 Chevrolet Silverado", series:"GL Dually Drivers"},
+  {brand:"Greenlight", name:"Ford Mustang Boss 302", series:"GL Muscle"},
+  {brand:"Greenlight", name:"Chevrolet Corvette Z06", series:"GL Muscle"},
+
+  {brand:"M2 Machines", name:"'70 Chevrolet Chevelle SS", series:"M2 Detroit-Muscle"},
+  {brand:"M2 Machines", name:"'67 Pontiac GTO", series:"M2 Detroit-Muscle"},
+  {brand:"M2 Machines", name:"Harley-Davidson Motorcycle", series:"M2 Auto-Lifts"},
+
+  {brand:"Inno64", name:"Toyota Chaser JZX100 Tourer V", series:"Inno64 JDM"},
+  {brand:"Inno64", name:"Nissan Silvia S15 Spec R", series:"Inno64 JDM"},
+  {brand:"Inno64", name:"Subaru Impreza 22B STI", series:"Inno64 JDM"},
+
+  {brand:"Tarmac Works", name:"Nissan Silvia S15", series:"Tarmac Works Global64"},
+  {brand:"Tarmac Works", name:"Mercedes-AMG GT Black Series", series:"Tarmac Works Global64"},
+  {brand:"Tarmac Works", name:"Ferrari 296 GTB", series:"Tarmac Works Global64"},
+
+  {brand:"CM Model", name:"Nissan Silvia S13", series:"CM Model JDM"},
+  {brand:"CM Model", name:"Honda Civic EF9", series:"CM Model JDM"},
+
+  {brand:"Kyosho", name:"Toyota GR Corolla", series:"Kyosho Original"},
+  {brand:"Kyosho", name:"Honda Civic Type R FK8", series:"Kyosho Original"},
+
+  {brand:"AUTOart", name:"Nissan Skyline GT-R (R34)", series:"AUTOart Signature"},
+  {brand:"AUTOart", name:"Toyota Supra A80", series:"AUTOart Signature"},
+  {brand:"AUTOart", name:"Mazda RX-7 FD3S", series:"AUTOart Signature"},
+
+  {brand:"Maisto", name:"Ford Mustang GT", series:"Maisto Fresh Metal"},
+  {brand:"Maisto", name:"Chevrolet Corvette", series:"Maisto Fresh Metal"},
+  {brand:"Maisto", name:"Dodge Charger SRT", series:"Maisto Fresh Metal"},
+
+  {brand:"Bburago", name:"Ferrari 488 GTB", series:"Bburago Street Fire"},
+  {brand:"Bburago", name:"Lamborghini Huracán", series:"Bburago Street Fire"},
+  {brand:"Bburago", name:"Alfa Romeo Giulia Quadrifoglio", series:"Bburago Street Fire"},
+
+  {brand:"Auto World", name:"'69 Dodge Charger Daytona", series:"Auto World Muscle Cars"},
+  {brand:"Auto World", name:"'70 Plymouth Cuda", series:"Auto World Muscle Cars"},
+  {brand:"Auto World", name:"Batmobile 1989", series:"Auto World Silver Screen"},
+
+  {brand:"Hot Wheels", name:"Toyota Sera", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Honda CR-X", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Nissan Pulsar GTI-R", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Mitsubishi 3000GT", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"Toyota MR2", series:"HW J-Imports"},
+  {brand:"Hot Wheels", name:"'70 Ford Maverick", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'69 Chevrolet Yenko Camaro", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'65 Shelby GT350", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"'68 Mercury Cougar", series:"HW Muscle Mania"},
+  {brand:"Hot Wheels", name:"Chrysler 300 Letter Series", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"'56 Ford Fairlane", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"'59 Cadillac Series 62", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"Studebaker Avanti", series:"HW Originals"},
+  {brand:"Hot Wheels", name:"Ford F-100 Panel Truck", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"Chevrolet Cheyenne", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"International Harvester Scout", series:"HW Hot Trucks"},
+  {brand:"Hot Wheels", name:"Aston Martin Vantage", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Bentley Continental GT", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Rolls-Royce Phantom", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"De Tomaso Pantera", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Iso Grifo", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Porsche Cayman GT4", series:"HW Exotics"},
+  {brand:"Hot Wheels", name:"Chevrolet Bolt EV", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Nissan Leaf", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Polestar 1", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"'23 Ford F-150 Lightning", series:"HW Electric"},
+  {brand:"Hot Wheels", name:"Custom Camaro Gasser", series:"HW Drag Strip"},
+  {brand:"Hot Wheels", name:"Anglia Gasser", series:"HW Drag Strip"},
+  {brand:"Hot Wheels", name:"Nova Wagon Gasser", series:"HW Drag Strip"},
+  {brand:"Hot Wheels", name:"Baja Bug", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Sandblaster", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Rock Crawler", series:"HW Off-Road"},
+  {brand:"Hot Wheels", name:"Dump Truck", series:"HW City"},
+  {brand:"Hot Wheels", name:"Ice Cream Truck", series:"HW City"},
+  {brand:"Hot Wheels", name:"Food Truck", series:"HW City"},
+  {brand:"Hot Wheels", name:"Airport Cargo Loader", series:"HW City"},
+  {brand:"Hot Wheels", name:"Lifeguard Truck", series:"HW Rescue"},
+  {brand:"Hot Wheels", name:"Mountain Rescue 4x4", series:"HW Rescue"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Fast & Furious Toyota Supra", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Fast & Furious Dodge Charger", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Retro Entertainment Cars Movie Lightning McQueen", series:"HW Retro Entertainment"},
+  {brand:"Hot Wheels", name:"Car Culture Mitsubishi Lancer Evo", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Car Culture Nissan Skyline Kenmeri", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Car Culture Datsun Fairlady Roadster", series:"HW Car Culture"},
+  {brand:"Hot Wheels", name:"Team Transport Nissan Skyline + Trailer", series:"HW Team Transport"},
+  {brand:"Hot Wheels", name:"Boulevard Nissan Figaro", series:"HW Boulevard"},
+  {brand:"Hot Wheels", name:"Boulevard Citroën DS", series:"HW Boulevard"},
+  {brand:"Hot Wheels", name:"Monster Truck Megalodon", series:"HW Monster Trucks"},
+  {brand:"Hot Wheels", name:"Monster Truck Bone Crusher", series:"HW Monster Trucks"},
+  {brand:"Hot Wheels", name:"Monster Truck Grave Digger", series:"HW Monster Trucks"},
+
+  {brand:"Matchbox", name:"MBX Snow Plow", series:"MBX Rescue"},
+  {brand:"Matchbox", name:"MBX Volcano Explorer", series:"MBX Adventure City"},
+  {brand:"Matchbox", name:"MBX Safari Jeep", series:"MBX Adventure City"},
+  {brand:"Matchbox", name:"Chevrolet Silverado", series:"MBX Highway"},
+  {brand:"Matchbox", name:"Volkswagen Amarok", series:"MBX Off-Road"},
+  {brand:"Matchbox", name:"MBX Race Car #7", series:"MBX Racing"},
+
+  {brand:"Tomica", name:"Toyota Yaris", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Isuzu Elf Truck", series:"Tomica Regular"},
+  {brand:"Tomica", name:"Nissan Skyline GT-R (R35) Nismo", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Toyota Sports 800", series:"Tomica Premium"},
+  {brand:"Tomica", name:"Postal Delivery Van", series:"Tomica Hyper Rescue"},
+
+  {brand:"Majorette", name:"Toyota Supra", series:"Majorette Deluxe Cars"},
+  {brand:"Majorette", name:"Nissan 370Z", series:"Majorette Deluxe Cars"},
+  {brand:"Majorette", name:"DAF Truck", series:"Majorette Trucks"},
+  {brand:"Majorette", name:"Volkswagen Beetle", series:"Majorette Vintage"},
+
+  {brand:"Mini GT", name:"Nissan Skyline 2000GT-R (Hakosuka)", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Honda S2000", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Toyota Sprinter Trueno AE86", series:"Mini GT JDM"},
+  {brand:"Mini GT", name:"Bentley Continental GT3", series:"Mini GT Sport"},
+  {brand:"Mini GT", name:"Rolls-Royce Cullinan", series:"Mini GT Sport"},
+
+  {brand:"Johnny Lightning", name:"'70 Ford Torino Cobra", series:"JL Muscle Cars USA"},
+  {brand:"Johnny Lightning", name:"'68 Chevrolet Corvette", series:"JL Classic Gold"},
+
+  {brand:"Greenlight", name:"'21 Ford Bronco", series:"GL All-Terrain"},
+  {brand:"Greenlight", name:"'70 Chevrolet C-10", series:"GL Muscle"},
+  {brand:"Greenlight", name:"Tesla Cybertruck", series:"GL Electric"},
+
+  {brand:"M2 Machines", name:"'40 Ford Sedan Delivery", series:"M2 Auto-Thentics"},
+  {brand:"M2 Machines", name:"'64 Buick Riviera", series:"M2 Auto-Thentics"},
+
+  {brand:"Inno64", name:"Toyota Sprinter Trueno AE86 Initial D", series:"Inno64 JDM"},
+  {brand:"Inno64", name:"Mitsubishi Lancer Evo VI", series:"Inno64 JDM"},
+
+  {brand:"Tarmac Works", name:"Toyota Sprinter Trueno AE86", series:"Tarmac Works Global64"},
+  {brand:"Tarmac Works", name:"BMW M4 GT3", series:"Tarmac Works Global64"},
+
+  {brand:"CM Model", name:"Toyota Chaser JZX90", series:"CM Model JDM"},
+
+  {brand:"Kyosho", name:"Nissan Fairlady Z432", series:"Kyosho Original"},
+
+  {brand:"AUTOart", name:"Honda NSX Type R", series:"AUTOart Signature"},
+  {brand:"AUTOart", name:"Lamborghini Countach LP500S", series:"AUTOart Signature"},
+
+  {brand:"Maisto", name:"BMW M4", series:"Maisto Fresh Metal"},
+  {brand:"Maisto", name:"Harley-Davidson Softail", series:"Maisto Motorcycles"},
+
+  {brand:"Bburago", name:"Porsche 911 Turbo", series:"Bburago Street Fire"},
+  {brand:"Bburago", name:"Mercedes-AMG GT R", series:"Bburago Street Fire"},
+
+  {brand:"Auto World", name:"'66 Ford Fairlane GT", series:"Auto World Muscle Cars"},
+  {brand:"Auto World", name:"Ecto-1 Ghostbusters", series:"Auto World Silver Screen"},
+
+  {brand:"Hobby Japan", name:"Nissan Skyline GT-R (R32) Gr.A", series:"Hobby Japan Racing"},
+  {brand:"Hobby Japan", name:"Toyota Supra JZA80 Super GT", series:"Hobby Japan Racing"},
+  {brand:"Hobby Japan", name:"Honda NSX GT500", series:"Hobby Japan Racing"},
+
+  {brand:"Schuco", name:"Volkswagen Käfer (Beetle)", series:"Schuco Classic"},
+  {brand:"Schuco", name:"Porsche 356 Speedster", series:"Schuco Classic"},
+  {brand:"Schuco", name:"Mercedes-Benz 300 SL Gullwing", series:"Schuco Classic"},
 ];
 
 async function loadItems(){
@@ -381,10 +885,18 @@ function handlePhoto(e){
   reader.readAsDataURL(file);
 }
 
+function itemValue(item){
+  if(item.marketValue && item.marketValue>0){
+    return {amount: item.marketValue, isEstimate:false};
+  }
+  const est = rarityValue(item.rarity, item.purchasePrice);
+  return est ? {amount: est, isEstimate:true} : null;
+}
+
 function rarityValue(rarity, purchasePrice){
-  const p = purchasePrice && purchasePrice>0 ? purchasePrice : 60; // varsayılan mainline fiyatı (₺)
+  if(!purchasePrice || purchasePrice<=0) return null;
   const mult = {Normal:1.15, TH:3.5, STH:9, Chase:4.5, Premium:1.6}[rarity] || 1.15;
-  return Math.round(p*mult);
+  return Math.round(purchasePrice*mult);
 }
 
 function badgeLabel(r){
@@ -393,12 +905,22 @@ function badgeLabel(r){
 
 /* ---------- KOLEKSİYON & İSTEK LİSTESİ RENDER ---------- */
 function cardHTML(v){
-  const est = rarityValue(v.rarity, v.purchasePrice);
+  const val = itemValue(v);
   const actions = `
     <div class="actions">
       ${v.status==='wishlist' ? `<button class="primary" onclick="moveToOwned('${v.id}')">Satın Aldım</button>` : ''}
       <button onclick="editItem('${v.id}')">Düzenle</button>
     </div>`;
+  const valueRow = val ? `
+        <div class="value-row">
+          <div>
+            <div class="label">${val.isEstimate ? 'Kaba Tahmin' : 'Güncel Değer'}</div>
+            <div class="amount">₺${val.amount.toLocaleString('tr-TR')}</div>
+          </div>
+        </div>` : `
+        <div class="value-row">
+          <div class="label" style="color:var(--text-dim)">Değer girilmedi</div>
+        </div>`;
   return `
     <div class="vcard">
       <div class="del" onclick="deleteItem('${v.id}')">✕</div>
@@ -411,12 +933,7 @@ function cardHTML(v){
           </div>
         </div>
         <div class="badges"><span class="badge ${v.rarity}">${badgeLabel(v.rarity)}</span></div>
-        <div class="value-row">
-          <div>
-            <div class="label">Tahmini Değer</div>
-            <div class="amount">₺${est.toLocaleString('tr-TR')}</div>
-          </div>
-        </div>
+        ${valueRow}
         ${actions}
       </div>
     </div>`;
@@ -432,7 +949,7 @@ function matches(item, q){
 
 function sortItems(list, mode){
   const arr = [...list];
-  if(mode==='valueDesc') arr.sort((a,b)=> rarityValue(b.rarity,b.purchasePrice) - rarityValue(a.rarity,a.purchasePrice));
+  if(mode==='valueDesc') arr.sort((a,b)=> (itemValue(b)?.amount||0) - (itemValue(a)?.amount||0));
   else if(mode==='rarity') arr.sort((a,b)=> RARITY_ORDER[a.rarity]-RARITY_ORDER[b.rarity]);
   else if(mode==='az') arr.sort((a,b)=> a.name.localeCompare(b.name,'tr'));
   else arr.reverse(); // 'new' -> son eklenen en üstte
@@ -521,7 +1038,7 @@ function addFromDB(idx, status){
 
 /* ---------- CUSTOM EKLE / DÜZENLE ---------- */
 function resetForm(){
-  ['f_brand','f_name','f_series','f_year','f_color','f_price'].forEach(id=>document.getElementById(id).value='');
+  ['f_brand','f_name','f_series','f_year','f_color','f_price','f_marketvalue'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f_rarity').value='Normal';
   document.getElementById('f_status').value='owned';
   pendingPhoto = null;
@@ -542,6 +1059,7 @@ function editItem(id){
   document.getElementById('f_color').value = it.color||'';
   document.getElementById('f_rarity').value = it.rarity||'Normal';
   document.getElementById('f_price').value = it.purchasePrice||'';
+  document.getElementById('f_marketvalue').value = it.marketValue||'';
   document.getElementById('f_status').value = it.status||'owned';
   pendingPhoto = it.photo||null;
   document.getElementById('photoBoxText').innerText = it.photo ? '✓ Fotoğraf seçili' : '📷 Fotoğraf ekle (opsiyonel)';
@@ -563,6 +1081,7 @@ function saveCustom(){
   const color = document.getElementById('f_color').value.trim();
   const rarity = document.getElementById('f_rarity').value;
   const price = document.getElementById('f_price').value;
+  const marketValue = document.getElementById('f_marketvalue').value;
   const status = document.getElementById('f_status').value;
 
   if(!brand || !name){ alert('Marka ve model adı zorunlu.'); return; }
@@ -572,14 +1091,18 @@ function saveCustom(){
     if(it){
       Object.assign(it, {
         brand, name, series, year: year?Number(year):null, color,
-        rarity, purchasePrice: price?Number(price):null, status, photo: pendingPhoto
+        rarity, purchasePrice: price?Number(price):null,
+        marketValue: marketValue?Number(marketValue):null,
+        status, photo: pendingPhoto
       });
     }
   } else {
     items.push({
       id: Date.now().toString(36)+Math.random().toString(36).slice(2,5),
       brand, name, series, year: year?Number(year):null, color,
-      rarity, purchasePrice: price?Number(price):null, status, photo: pendingPhoto
+      rarity, purchasePrice: price?Number(price):null,
+      marketValue: marketValue?Number(marketValue):null,
+      status, photo: pendingPhoto
     });
   }
   persistItems();
@@ -602,7 +1125,7 @@ function deleteItem(id){
 function renderPanel(){
   const owned = items.filter(i=>i.status==='owned');
   const wishlist = items.filter(i=>i.status==='wishlist');
-  const totalValue = owned.reduce((s,i)=>s+rarityValue(i.rarity,i.purchasePrice),0);
+  const totalValue = owned.reduce((s,i)=>s+(itemValue(i)?.amount||0),0);
   const rareCount = owned.filter(i=>['TH','STH','Chase'].includes(i.rarity)).length;
 
   document.getElementById('statCount').innerText = owned.length;
