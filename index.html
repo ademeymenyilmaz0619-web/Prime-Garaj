@@ -943,8 +943,8 @@ const RARITY_ORDER = {STH:0, Chase:1, TH:2, Premium:3, Normal:4};
 
 function matches(item, q){
   if(!q) return true;
-  q = q.toLowerCase();
-  return item.name.toLowerCase().includes(q) || item.brand.toLowerCase().includes(q) || (item.series||'').toLowerCase().includes(q);
+  q = q.toLocaleLowerCase('tr');
+  return item.name.toLocaleLowerCase('tr').includes(q) || item.brand.toLocaleLowerCase('tr').includes(q) || (item.series||'').toLocaleLowerCase('tr').includes(q);
 }
 
 function sortItems(list, mode){
@@ -997,10 +997,10 @@ function setBrandFilter(b){ dbBrandFilter = b; renderDB(); }
 
 function renderDB(){
   renderBrandChips();
-  const q = document.getElementById('dbSearch').value.toLowerCase();
+  const q = document.getElementById('dbSearch').value.toLocaleLowerCase('tr');
   let results = DATABASE.filter(d =>
     (dbBrandFilter==='Tümü' || d.brand===dbBrandFilter) &&
-    (d.name.toLowerCase().includes(q) || d.series.toLowerCase().includes(q) || d.brand.toLowerCase().includes(q))
+    (d.name.toLocaleLowerCase('tr').includes(q) || d.series.toLocaleLowerCase('tr').includes(q) || d.brand.toLocaleLowerCase('tr').includes(q))
   );
   const list = document.getElementById('dbList');
   if(results.length===0){
