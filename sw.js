@@ -1,4 +1,4 @@
-const CACHE_NAME = 'primegaraj-v2';
+const CACHE_NAME = 'primegaraj-v3';
 const ASSETS = [
   './',
   './index.html',
