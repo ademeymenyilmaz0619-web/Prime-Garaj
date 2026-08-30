@@ -239,6 +239,14 @@ nav.bottom button svg{ width:19px; height:19px; }
     <div class="section-title">Marka Dağılımı</div>
     <div id="brandBars"></div>
     <div class="disclaimer">Değer tahminleri, girdiğin alış fiyatı ve nadirlik tipine göre kabaca hesaplanan hobici tahminleridir; gerçek koleksiyoncu piyasasını (eBay, hobiDB vb.) yansıtmaz. Belirli bir parçanın güncel fiyatını öğrenmek istersen sohbette benden araştırmamı isteyebilirsin.</div>
+
+    <div class="section-title">Yedekleme</div>
+    <div class="hint" style="margin-top:0">Koleksiyonun sadece bu telefonda saklanıyor. Telefon değişirse ya da uygulama silinirse veriler kaybolur — düzenli yedek almanı öneririm.</div>
+    <button class="btn secondary" onclick="exportBackup()">📤 Yedek Al (Dosya İndir)</button>
+    <label class="photo-input" style="margin-top:10px">
+      <span>📥 Yedekten Geri Yükle</span>
+      <input type="file" accept="application/json,.json" onchange="importBackup(event)">
+    </label>
   </div>
 
   <!-- SOR (Claude'a hızlı soru) -->
@@ -10684,6 +10692,67 @@ function renderSorList(){
         <button class="btn small" style="margin-top:10px" onclick="askClaudeForItem('${v.id}')">💬 Bu Modelin Fiyatını Sor</button>
       </div>
     </div>`).join('');
+}
+
+/* ---------- YEDEKLEME ---------- */
+function exportBackup(){
+  const backup = {
+    app: 'Prime Garaj',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    items: items
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `primegaraj-yedek-${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  alert('Yedek dosyası indirildi! Kaybolmasın diye WhatsApp\'ta kendine de atabilirsin.');
+}
+
+function importBackup(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const data = JSON.parse(e.target.result);
+      if(!data.items || !Array.isArray(data.items)){
+        alert('Bu dosya geçerli bir Prime Garaj yedeği gibi görünmüyor.');
+        return;
+      }
+      const mode = confirm(
+        `${data.items.length} model bulundu.\n\n` +
+        `TAMAM: Mevcut koleksiyonunla birleştir (üzerine eklenir)\n` +
+        `İPTAL: Önce her şeyi sil, sonra bu yedeği yükle`
+      );
+      if(mode){
+        // Birleştir: aynı id'ler varsa çakışmasın diye yeni id ver
+        const existingIds = new Set(items.map(i=>i.id));
+        data.items.forEach(it=>{
+          if(existingIds.has(it.id)){
+            it.id = Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+          }
+          items.push(it);
+        });
+      } else {
+        items = data.items;
+      }
+      persistItems();
+      renderAll();
+      alert('Yedek başarıyla yüklendi! Koleksiyon: '+items.filter(i=>i.status==='owned').length+' model');
+      goTo('koleksiyon');
+    }catch(err){
+      alert('Dosya okunamadı, bozuk olabilir: '+err.message);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
 }
 
 loadItems();
