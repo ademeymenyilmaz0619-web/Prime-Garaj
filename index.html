@@ -30,7 +30,21 @@
   --good:#5fbf80;
   --border:#31363c;
 }
+html[data-theme="light"]{
+  --bg:#f4f2ee;
+  --surface:#ffffff;
+  --surface-2:#eeece6;
+  --amber:#d98a1f;
+  --teal:#1f8f7d;
+  --purple:#8054c2;
+  --text:#211f1a;
+  --text-dim:#6b6b66;
+  --danger:#c8392f;
+  --good:#2f9955;
+  --border:#ddd9d0;
+}
 *{box-sizing:border-box; margin:0; padding:0;}
+body{ transition:background-color .2s ease, color .2s ease; }
 body{
   background:var(--bg); color:var(--text); font-family:'Inter',sans-serif;
   display:flex; justify-content:center; min-height:100vh;
@@ -102,6 +116,33 @@ header.top .sub{ color:var(--text-dim); font-size:13px; margin-top:4px; }
 .hint{ font-size:12px; color:var(--text-dim); margin:-6px 0 16px; line-height:1.5;}
 .disclaimer{ font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-top:14px; padding:12px; background:var(--surface-2); border-radius:10px; border-left:3px solid var(--teal); }
 
+/* TEMA SWITCH */
+.theme-row{ display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:8px; }
+.theme-row .lbl2{ font-family:'Rajdhani',sans-serif; font-weight:600; font-size:15px; }
+.switch{ position:relative; width:46px; height:26px; }
+.switch input{ opacity:0; width:0; height:0; }
+.switch .slider{ position:absolute; inset:0; background:var(--surface-2); border:1px solid var(--border); border-radius:20px; cursor:pointer; transition:.2s; }
+.switch .slider:before{ content:""; position:absolute; width:18px; height:18px; left:3px; top:3px; background:var(--text-dim); border-radius:50%; transition:.2s; }
+.switch input:checked + .slider{ background:var(--amber); border-color:var(--amber); }
+.switch input:checked + .slider:before{ transform:translateX(20px); background:#1a1408; }
+
+/* FAVORİ YILDIZ */
+.fav-star{ position:absolute; top:10px; left:10px; background:rgba(20,23,26,0.75); border:1px solid var(--border); color:var(--text-dim); width:30px; height:30px; border-radius:8px; font-size:15px; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:2; }
+.fav-star.active{ color:var(--amber); border-color:var(--amber); }
+html[data-theme="light"] .fav-star{ background:rgba(255,255,255,0.85); }
+
+/* ETİKETLER */
+.tag-chip{ font-size:10.5px; padding:3px 9px; border-radius:20px; background:var(--surface-2); color:var(--text-dim); border:1px solid var(--border); display:inline-block; }
+.tags-row{ margin-top:8px; display:flex; gap:5px; flex-wrap:wrap; }
+
+/* ROZETLER */
+.badge-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px; }
+.achievement{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px; text-align:center; opacity:0.35; }
+.achievement.unlocked{ opacity:1; border-color:var(--amber); background:linear-gradient(160deg, var(--surface), rgba(242,169,59,0.08)); }
+.achievement .ach-icon{ font-size:26px; margin-bottom:6px; }
+.achievement .ach-title{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:13px; }
+.achievement .ach-desc{ font-size:10.5px; color:var(--text-dim); margin-top:3px; line-height:1.3; }
+
 .form-header{ display:flex; align-items:center; gap:12px; margin-bottom:18px; }
 .form-header .back{ width:34px; height:34px; border-radius:9px; background:var(--surface); border:1px solid var(--border); color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; }
 .form-header h2{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:20px; }
@@ -149,6 +190,7 @@ nav.bottom button svg{ width:19px; height:19px; }
       <input type="text" id="kSearch" placeholder="Koleksiyonda ara..." oninput="renderAll()">
       <select id="kSort" onchange="renderAll()">
         <option value="new">Yeni Eklenen</option>
+        <option value="favorite">Favoriler Önce</option>
         <option value="valueDesc">Değer (Yüksek→Düşük)</option>
         <option value="rarity">Nadirlik</option>
         <option value="az">A-Z</option>
@@ -223,17 +265,31 @@ nav.bottom button svg{ width:19px; height:19px; }
     </div>
     <div class="hint">Bu modelin gerçek güncel değerini biliyorsan (eBay, hobiDB, ilan sitelerinden) buraya yaz — uygulama her zaman bunu formül tahminine tercih eder.</div>
 
+    <div class="field">
+      <label>Etiketler — opsiyonel, virgülle ayır</label>
+      <input type="text" id="f_tags" placeholder="Örn: Rafta, Kutulu, Nadir">
+    </div>
+
     <button class="btn" id="saveBtn" onclick="saveCustom()">Kaydet</button>
   </div>
 
   <!-- PANEL -->
   <div class="screen" id="screen-panel">
+    <div class="theme-row">
+      <span class="lbl2">🌓 Açık Tema</span>
+      <label class="switch">
+        <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+        <span class="slider"></span>
+      </label>
+    </div>
     <div class="stat-grid">
       <div class="stat-card"><div class="num" id="statCount">0</div><div class="lbl">Koleksiyonda</div></div>
       <div class="stat-card"><div class="num" id="statValue">₺0</div><div class="lbl">Tahmini Değer</div></div>
       <div class="stat-card"><div class="num" id="statWishlist">0</div><div class="lbl">İstek Listesi</div></div>
       <div class="stat-card"><div class="num" id="statRare">0</div><div class="lbl">Nadir Parça (TH/STH/Chase)</div></div>
     </div>
+    <div class="section-title">Rozetler / Başarımlar</div>
+    <div class="badge-grid" id="achievementGrid"></div>
     <div class="section-title">Nadirlik Dağılımı</div>
     <div id="rarityBars"></div>
     <div class="section-title">Marka Dağılımı</div>
@@ -10388,8 +10444,11 @@ function cardHTML(v){
         <div class="value-row">
           <div class="label" style="color:var(--text-dim)">Değer girilmedi</div>
         </div>`;
+  const tagsRow = (v.tags && v.tags.length) ? `
+        <div class="tags-row">${v.tags.map(t=>`<span class="tag-chip">${t}</span>`).join('')}</div>` : '';
   return `
     <div class="vcard">
+      <div class="fav-star ${v.favorite?'active':''}" onclick="toggleFavorite('${v.id}')">${v.favorite?'★':'☆'}</div>
       <div class="del" onclick="deleteItem('${v.id}')">✕</div>
       <div class="photo" style="${v.photo?`background-image:url('${v.photo}')`:''}">${v.photo?'':'Fotoğraf yok'}</div>
       <div class="body">
@@ -10400,6 +10459,7 @@ function cardHTML(v){
           </div>
         </div>
         <div class="badges"><span class="badge ${v.rarity}">${badgeLabel(v.rarity)}</span></div>
+        ${tagsRow}
         ${valueRow}
         ${actions}
       </div>
@@ -10411,7 +10471,8 @@ const RARITY_ORDER = {STH:0, Chase:1, TH:2, Premium:3, Normal:4};
 function matches(item, q){
   if(!q) return true;
   q = q.toLocaleLowerCase('tr');
-  return item.name.toLocaleLowerCase('tr').includes(q) || item.brand.toLocaleLowerCase('tr').includes(q) || (item.series||'').toLocaleLowerCase('tr').includes(q);
+  const tagText = (item.tags||[]).join(' ').toLocaleLowerCase('tr');
+  return item.name.toLocaleLowerCase('tr').includes(q) || item.brand.toLocaleLowerCase('tr').includes(q) || (item.series||'').toLocaleLowerCase('tr').includes(q) || tagText.includes(q);
 }
 
 function sortItems(list, mode){
@@ -10419,6 +10480,7 @@ function sortItems(list, mode){
   if(mode==='valueDesc') arr.sort((a,b)=> (itemValue(b)?.amount||0) - (itemValue(a)?.amount||0));
   else if(mode==='rarity') arr.sort((a,b)=> RARITY_ORDER[a.rarity]-RARITY_ORDER[b.rarity]);
   else if(mode==='az') arr.sort((a,b)=> a.name.localeCompare(b.name,'tr'));
+  else if(mode==='favorite') arr.sort((a,b)=> (b.favorite?1:0)-(a.favorite?1:0));
   else arr.reverse(); // 'new' -> son eklenen en üstte
   return arr;
 }
@@ -10521,7 +10583,7 @@ function addFromDB(idx, status){
 
 /* ---------- CUSTOM EKLE / DÜZENLE ---------- */
 function resetForm(){
-  ['f_brand','f_name','f_series','f_year','f_color','f_price','f_marketvalue'].forEach(id=>document.getElementById(id).value='');
+  ['f_brand','f_name','f_series','f_year','f_color','f_price','f_marketvalue','f_tags'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f_rarity').value='Normal';
   document.getElementById('f_status').value='owned';
   pendingPhoto = null;
@@ -10544,6 +10606,7 @@ function editItem(id){
   document.getElementById('f_price').value = it.purchasePrice||'';
   document.getElementById('f_marketvalue').value = it.marketValue||'';
   document.getElementById('f_status').value = it.status||'owned';
+  document.getElementById('f_tags').value = (it.tags||[]).join(', ');
   pendingPhoto = it.photo||null;
   document.getElementById('photoBoxText').innerText = it.photo ? '✓ Fotoğraf seçili' : '📷 Fotoğraf ekle (opsiyonel)';
   document.getElementById('formTitle').innerText = 'Modeli Düzenle';
@@ -10566,6 +10629,7 @@ function saveCustom(){
   const price = document.getElementById('f_price').value;
   const marketValue = document.getElementById('f_marketvalue').value;
   const status = document.getElementById('f_status').value;
+  const tags = document.getElementById('f_tags').value.split(',').map(t=>t.trim()).filter(Boolean);
 
   if(!brand || !name){ alert('Marka ve model adı zorunlu.'); return; }
 
@@ -10576,7 +10640,7 @@ function saveCustom(){
         brand, name, series, year: year?Number(year):null, color,
         rarity, purchasePrice: price?Number(price):null,
         marketValue: marketValue?Number(marketValue):null,
-        status, photo: pendingPhoto
+        status, photo: pendingPhoto, tags
       });
     }
   } else {
@@ -10585,13 +10649,18 @@ function saveCustom(){
       brand, name, series, year: year?Number(year):null, color,
       rarity, purchasePrice: price?Number(price):null,
       marketValue: marketValue?Number(marketValue):null,
-      status, photo: pendingPhoto
+      status, photo: pendingPhoto, tags, favorite:false
     });
   }
   persistItems();
   renderAll();
   resetForm();
   goTo(status==='owned' ? 'koleksiyon' : 'istek');
+}
+
+function toggleFavorite(id){
+  const it = items.find(i=>i.id===id);
+  if(it){ it.favorite = !it.favorite; persistItems(); renderAll(); }
 }
 
 function moveToOwned(id){
@@ -10602,6 +10671,49 @@ function moveToOwned(id){
 function deleteItem(id){
   items = items.filter(i=>i.id!==id);
   persistItems(); renderAll();
+}
+
+/* ---------- TEMA ---------- */
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('themeToggle').checked = (theme==='light');
+}
+function toggleTheme(){
+  const isLight = document.getElementById('themeToggle').checked;
+  const theme = isLight ? 'light' : 'dark';
+  localStorage.setItem('primegaraj_theme', theme);
+  applyTheme(theme);
+}
+function loadTheme(){
+  const saved = localStorage.getItem('primegaraj_theme') || 'dark';
+  applyTheme(saved);
+}
+
+/* ---------- ROZETLER / BAŞARIMLAR ---------- */
+const ACHIEVEMENTS = [
+  {id:'first', icon:'🚗', title:'İlk Adım', desc:'İlk modelini ekle', check: o => o.length>=1},
+  {id:'ten', icon:'🏁', title:'Isınıyor', desc:'10 model biriktir', check: o => o.length>=10},
+  {id:'fifty', icon:'🏆', title:'Koleksiyoner', desc:'50 model biriktir', check: o => o.length>=50},
+  {id:'hundred', icon:'👑', title:'Garaj Kralı', desc:'100 model biriktir', check: o => o.length>=100},
+  {id:'rare', icon:'💎', title:'Şanslı Avcı', desc:'Bir TH/STH/Chase parça bul', check: o => o.some(i=>['TH','STH','Chase'].includes(i.rarity))},
+  {id:'fivebrand', icon:'🏷️', title:'Marka Gezgini', desc:"5 farklı markadan model topla", check: o => new Set(o.map(i=>i.brand)).size>=5},
+  {id:'photo', icon:'📸', title:'Fotoğrafçı', desc:'İlk fotoğraflı modelini ekle', check: o => o.some(i=>i.photo)},
+  {id:'fav', icon:'⭐', title:'Favorim Bu', desc:'Bir modeli favorile', check: o => o.some(i=>i.favorite)},
+  {id:'tagged', icon:'🔖', title:'Düzenli Koleksiyoner', desc:'Bir modele etiket ekle', check: o => o.some(i=>i.tags && i.tags.length>0)},
+  {id:'value', icon:'💰', title:'Değerli Garaj', desc:'Toplam değer 1.000₺ üstü', check: (o,total) => total>=1000},
+];
+
+function renderAchievements(owned, totalValue){
+  const grid = document.getElementById('achievementGrid');
+  grid.innerHTML = ACHIEVEMENTS.map(a=>{
+    const unlocked = a.check(owned, totalValue);
+    return `
+      <div class="achievement ${unlocked?'unlocked':''}">
+        <div class="ach-icon">${unlocked ? a.icon : '🔒'}</div>
+        <div class="ach-title">${a.title}</div>
+        <div class="ach-desc">${a.desc}</div>
+      </div>`;
+  }).join('');
 }
 
 /* ---------- PANEL ---------- */
@@ -10615,6 +10727,8 @@ function renderPanel(){
   document.getElementById('statValue').innerText = '₺'+totalValue.toLocaleString('tr-TR');
   document.getElementById('statWishlist').innerText = wishlist.length;
   document.getElementById('statRare').innerText = rareCount;
+
+  renderAchievements(owned, totalValue);
 
   const rarityCounts = {};
   owned.forEach(i=> rarityCounts[i.rarity] = (rarityCounts[i.rarity]||0)+1 );
@@ -10757,6 +10871,7 @@ function importBackup(event){
 
 loadItems();
 renderBrandChips();
+loadTheme();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
