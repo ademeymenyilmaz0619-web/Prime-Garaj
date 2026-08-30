@@ -97,8 +97,8 @@ header.top .sub{ color:var(--text-dim); font-size:13px; margin-top:4px; }
 .vcard .value-row{ margin-top:12px; display:flex; justify-content:space-between; align-items:center; border-top:1px dashed var(--border); padding-top:10px; }
 .value-row .label{ font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px;}
 .value-row .amount{ font-family:'Share Tech Mono',monospace; font-size:16px; color:var(--teal); }
-.vcard .actions{ display:flex; gap:8px; margin-top:12px; }
-.vcard .actions button{ flex:1; font-size:12px; padding:8px; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); cursor:pointer; }
+.vcard .actions{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+.vcard .actions button{ flex:1; min-width:80px; font-size:12px; padding:8px; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); cursor:pointer; }
 .vcard .actions button.primary{ background:var(--amber); color:#1a1408; border:none; font-weight:600; }
 .vcard .del{ position:absolute; top:10px; right:10px; background:rgba(20,23,26,0.75); border:1px solid var(--border); color:var(--text-dim); width:26px; height:26px; border-radius:8px; font-size:13px; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:2;}
 
@@ -186,6 +186,7 @@ nav.bottom button svg{ width:19px; height:19px; }
 
   <!-- KOLEKSİYON -->
   <div class="screen active" id="screen-koleksiyon">
+    <div id="onThisDay"></div>
     <div class="searchbar">
       <input type="text" id="kSearch" placeholder="Koleksiyonda ara..." oninput="renderAll()">
       <select id="kSort" onchange="renderAll()">
@@ -311,6 +312,23 @@ nav.bottom button svg{ width:19px; height:19px; }
     <button class="btn secondary" onclick="askClaudeGeneric()" style="margin-bottom:16px">💬 Genel Soru Sor (Claude'u Aç)</button>
     <div class="section-title">Koleksiyonundan Seç</div>
     <div id="sorList"></div>
+  </div>
+
+  <!-- FİYAT GEÇMİŞİ -->
+  <div class="screen" id="screen-history">
+    <div class="form-header">
+      <div class="back" onclick="goTo(lastMainScreen)">←</div>
+      <h2 id="historyTitle">Fiyat Geçmişi</h2>
+    </div>
+    <div id="historyList"></div>
+    <div class="section-title">Yeni Kayıt Ekle</div>
+    <div class="hint" style="margin-top:0">eBay, hobiDB ya da bir ilanda gördüğün fiyatı buraya not edebilirsin.</div>
+    <div class="row2">
+      <div class="field"><label>Değer (₺)</label><input type="number" id="h_amount" placeholder="150"></div>
+      <div class="field"><label>Tarih</label><input type="date" id="h_date"></div>
+    </div>
+    <div class="field"><label>Not — opsiyonel</label><input type="text" id="h_note" placeholder="Örn: eBay ilanı"></div>
+    <button class="btn" onclick="addHistoryEntry()">Kayıt Ekle</button>
   </div>
 
   <button class="fab-add" id="fabAdd" onclick="quickAdd()">+</button>
@@ -10357,6 +10375,7 @@ async function loadItems(){
     items = raw ? JSON.parse(raw) : [];
   }catch(e){ items = []; }
   renderAll();
+  renderOnThisDay();
 }
 async function persistItems(){
   try{ localStorage.setItem('primegaraj_items', JSON.stringify(items)); }
@@ -10364,13 +10383,13 @@ async function persistItems(){
 }
 
 function goTo(screen){
-  if(screen!=='ekle') lastMainScreen = screen;
+  if(screen!=='ekle' && screen!=='history') lastMainScreen = screen;
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+screen).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   const btn = document.querySelector(`.nav-btn[data-screen="${screen}"]`);
   if(btn) btn.classList.add('active');
-  document.getElementById('mainHeader').style.display = screen==='ekle' ? 'none' : 'block';
+  document.getElementById('mainHeader').style.display = (screen==='ekle'||screen==='history') ? 'none' : 'block';
   window.scrollTo(0,0);
   if(screen==='db') renderDB();
   if(screen==='panel') renderPanel();
@@ -10433,6 +10452,7 @@ function cardHTML(v){
     <div class="actions">
       ${v.status==='wishlist' ? `<button class="primary" onclick="moveToOwned('${v.id}')">Satın Aldım</button>` : ''}
       <button onclick="editItem('${v.id}')">Düzenle</button>
+      <button onclick="openHistory('${v.id}')">📈 Geçmiş</button>
     </div>`;
   const valueRow = val ? `
         <div class="value-row">
@@ -10574,7 +10594,8 @@ function addFromDB(idx, status){
     id: Date.now().toString(36)+Math.random().toString(36).slice(2,5),
     brand:d.brand, name:d.name, series:d.series,
     year:d.year||null, color:d.color||null,
-    rarity:d.rarity||'Normal', purchasePrice:null, marketValue:null, status, photo:null
+    rarity:d.rarity||'Normal', purchasePrice:null, marketValue:null, status, photo:null,
+    dateAdded: new Date().toISOString(), priceHistory: []
   });
   persistItems();
   renderAll();
@@ -10633,23 +10654,34 @@ function saveCustom(){
 
   if(!brand || !name){ alert('Marka ve model adı zorunlu.'); return; }
 
+  const todayStr = new Date().toISOString().slice(0,10);
+
   if(editingId){
     const it = items.find(i=>i.id===editingId);
     if(it){
+      if(!it.priceHistory) it.priceHistory = [];
+      const newMarketValue = marketValue?Number(marketValue):null;
+      const lastEntry = it.priceHistory[it.priceHistory.length-1];
+      if(newMarketValue && (!lastEntry || lastEntry.amount!==newMarketValue)){
+        it.priceHistory.push({date: todayStr, amount: newMarketValue, note: 'Güncelleme'});
+      }
       Object.assign(it, {
         brand, name, series, year: year?Number(year):null, color,
         rarity, purchasePrice: price?Number(price):null,
-        marketValue: marketValue?Number(marketValue):null,
+        marketValue: newMarketValue,
         status, photo: pendingPhoto, tags
       });
     }
   } else {
+    const priceHistory = [];
+    if(price) priceHistory.push({date: todayStr, amount: Number(price), note: 'Alış fiyatı'});
     items.push({
       id: Date.now().toString(36)+Math.random().toString(36).slice(2,5),
       brand, name, series, year: year?Number(year):null, color,
       rarity, purchasePrice: price?Number(price):null,
       marketValue: marketValue?Number(marketValue):null,
-      status, photo: pendingPhoto, tags, favorite:false
+      status, photo: pendingPhoto, tags, favorite:false,
+      dateAdded: new Date().toISOString(), priceHistory
     });
   }
   persistItems();
@@ -10661,6 +10693,95 @@ function saveCustom(){
 function toggleFavorite(id){
   const it = items.find(i=>i.id===id);
   if(it){ it.favorite = !it.favorite; persistItems(); renderAll(); }
+}
+
+/* ---------- FİYAT GEÇMİŞİ ---------- */
+let currentHistoryId = null;
+
+function openHistory(id){
+  currentHistoryId = id;
+  document.getElementById('h_date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('h_amount').value = '';
+  document.getElementById('h_note').value = '';
+  renderHistory();
+  goTo('history');
+}
+
+function renderHistory(){
+  const it = items.find(i=>i.id===currentHistoryId);
+  if(!it) return;
+  document.getElementById('historyTitle').innerText = it.name;
+  const history = (it.priceHistory||[]).slice().sort((a,b)=> a.date.localeCompare(b.date));
+  const list = document.getElementById('historyList');
+  if(history.length===0){
+    list.innerHTML = `<div class="hint" style="margin-top:0">Bu model için henüz fiyat kaydı yok. Aşağıdan ilk kaydını ekle.</div>`;
+    return;
+  }
+  const maxAmount = Math.max(...history.map(h=>h.amount));
+  list.innerHTML = history.map((h,i)=>{
+    const prev = history[i-1];
+    let diffHtml = '';
+    if(prev){
+      const diff = h.amount - prev.amount;
+      const pct = prev.amount ? Math.round((diff/prev.amount)*100) : 0;
+      const cls = diff>=0 ? 'up' : 'down';
+      diffHtml = `<div class="delta ${cls}">${diff>=0?'+':''}${pct}%</div>`;
+    }
+    return `
+    <div class="vcard">
+      <div class="body" style="padding-top:14px">
+        <div class="value-row" style="border-top:none; padding-top:0; margin-top:0">
+          <div>
+            <div class="label">${new Date(h.date).toLocaleDateString('tr-TR', {day:'numeric', month:'long', year:'numeric'})}</div>
+            <div class="amount">₺${h.amount.toLocaleString('tr-TR')}</div>
+            ${h.note ? `<div class="meta" style="margin-top:2px">${h.note}</div>` : ''}
+          </div>
+          ${diffHtml}
+        </div>
+        <div class="bar-track" style="margin-top:8px"><div class="bar-fill" style="width:${(h.amount/maxAmount)*100}%"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addHistoryEntry(){
+  const it = items.find(i=>i.id===currentHistoryId);
+  if(!it) return;
+  const amount = Number(document.getElementById('h_amount').value);
+  const date = document.getElementById('h_date').value;
+  const note = document.getElementById('h_note').value.trim();
+  if(!amount || amount<=0){ alert('Geçerli bir değer gir.'); return; }
+  if(!date){ alert('Tarih seç.'); return; }
+  if(!it.priceHistory) it.priceHistory = [];
+  it.priceHistory.push({date, amount, note});
+  // en güncel tarihli kayıt "Güncel Piyasa Değeri" olarak da güncellensin
+  const sorted = [...it.priceHistory].sort((a,b)=>a.date.localeCompare(b.date));
+  if(sorted[sorted.length-1].date === date){
+    it.marketValue = amount;
+  }
+  persistItems();
+  renderAll();
+  renderHistory();
+  document.getElementById('h_amount').value='';
+  document.getElementById('h_note').value='';
+}
+
+/* ---------- BUGÜN NE ALMIŞTIM ---------- */
+function renderOnThisDay(){
+  const el = document.getElementById('onThisDay');
+  if(!el) return;
+  const today = new Date();
+  const mm = today.getMonth(), dd = today.getDate();
+  const matches = items.filter(i=>{
+    if(!i.dateAdded) return false;
+    const d = new Date(i.dateAdded);
+    return d.getMonth()===mm && d.getDate()===dd && d.getFullYear()<today.getFullYear();
+  });
+  if(matches.length===0){ el.innerHTML=''; return; }
+  el.innerHTML = matches.map(m=>{
+    const years = today.getFullYear() - new Date(m.dateAdded).getFullYear();
+    return `<div class="disclaimer" style="border-left-color:var(--amber)">📅 <b>${years} yıl önce bugün</b> "${m.name}" modelini eklemiştin!</div>`;
+  }).join('');
 }
 
 function moveToOwned(id){
