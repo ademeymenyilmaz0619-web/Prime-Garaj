@@ -97,6 +97,7 @@ header.top .sub{ color:var(--text-dim); font-size:13px; margin-top:4px; }
 .vcard .value-row{ margin-top:12px; display:flex; justify-content:space-between; align-items:center; border-top:1px dashed var(--border); padding-top:10px; }
 .value-row .label{ font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px;}
 .value-row .amount{ font-family:'Share Tech Mono',monospace; font-size:16px; color:var(--teal); }
+.amount-fx{ font-size:10.5px; color:var(--text-dim); margin-top:2px; font-family:'Inter',sans-serif; }
 .vcard .actions{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
 .vcard .actions button{ flex:1; min-width:80px; font-size:12px; padding:8px; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); cursor:pointer; }
 .vcard .actions button.primary{ background:var(--amber); color:#1a1408; border:none; font-weight:600; }
@@ -211,9 +212,9 @@ html[data-theme="light"] .compare-check{ background:rgba(255,255,255,0.85); }
 
 /* NAV */
 nav.bottom{ position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:420px; background:rgba(29,33,38,0.94); backdrop-filter:blur(8px); border-top:1px solid var(--border); display:flex; padding:7px 6px calc(9px + env(safe-area-inset-bottom)); gap:3px; }
-nav.bottom button{ flex:1; background:none; border:none; color:var(--text-dim); display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 2px; font-size:10px; font-family:'Inter',sans-serif; border-radius:10px; cursor:pointer; }
+nav.bottom button{ flex:1; background:none; border:none; color:var(--text-dim); display:flex; flex-direction:column; align-items:center; gap:2px; padding:6px 1px; font-size:9px; font-family:'Inter',sans-serif; border-radius:9px; cursor:pointer; }
 nav.bottom button.active{ color:var(--amber); background:rgba(242,169,59,0.08); }
-nav.bottom button svg{ width:19px; height:19px; }
+nav.bottom button svg{ width:17px; height:17px; }
 
 .fab-add{
   position:fixed; bottom:76px; left:50%;
@@ -310,6 +311,7 @@ nav.bottom button svg{ width:19px; height:19px; }
         <select id="f_status">
           <option value="owned">Koleksiyonumda</option>
           <option value="wishlist">İstek Listesi</option>
+          <option value="trade">Takas Listesi</option>
         </select>
       </div>
     </div>
@@ -338,7 +340,7 @@ nav.bottom button svg{ width:19px; height:19px; }
     </div>
     <div class="stat-grid">
       <div class="stat-card"><div class="num" id="statCount">0</div><div class="lbl">Koleksiyonda</div></div>
-      <div class="stat-card"><div class="num" id="statValue">₺0</div><div class="lbl">Tahmini Değer</div></div>
+      <div class="stat-card"><div class="num" id="statValue">₺0</div><div class="lbl">Tahmini Değer</div><div class="amount-fx" id="statValueFx"></div></div>
       <div class="stat-card"><div class="num" id="statWishlist">0</div><div class="lbl">İstek Listesi</div></div>
       <div class="stat-card"><div class="num" id="statRare">0</div><div class="lbl">Nadir Parça (TH/STH/Chase)</div></div>
     </div>
@@ -359,6 +361,15 @@ nav.bottom button svg{ width:19px; height:19px; }
       <span>📥 Yedekten Geri Yükle</span>
       <input type="file" accept="application/json,.json" onchange="importBackup(event)">
     </label>
+  </div>
+
+  <!-- TAKAS LİSTESİ -->
+  <div class="screen" id="screen-takas">
+    <div class="searchbar">
+      <input type="text" id="tSearch" placeholder="Takas listesinde ara..." oninput="renderAll()">
+    </div>
+    <div class="hint" style="margin-top:0">Elden çıkarmak/takas etmek istediğin modeller burada listelenir.</div>
+    <div id="takasList"></div>
   </div>
 
   <!-- SOR (Claude'a hızlı soru) -->
@@ -415,6 +426,10 @@ nav.bottom button svg{ width:19px; height:19px; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"/></svg>
       İstek
     </button>
+    <button class="nav-btn" data-screen="takas" onclick="goTo('takas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
+      Takas
+    </button>
     <button class="nav-btn" data-screen="sor" onclick="goTo('sor')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
       Sor
@@ -435,6 +450,7 @@ let dbBrandFilter = 'Tümü';
 let editingId = null;
 let compareMode = false;
 let compareSelection = [];
+let fxRates = null; // {USD:.., EUR:..} - 1 TRY karşılığı
 
 /* ---- Örnek / genişleyebilen veritabanı (marka + model + seri). Kullanıcı buradan ekleyebilir. ---- */
 const DATABASE = [
@@ -10467,13 +10483,13 @@ function goTo(screen){
   if(screen==='sor') renderSorList();
 
   const fab = document.getElementById('fabAdd');
-  if((screen==='koleksiyon' || screen==='istek') && !compareMode) fab.classList.add('show');
+  if((screen==='koleksiyon' || screen==='istek' || screen==='takas') && !compareMode) fab.classList.add('show');
   else fab.classList.remove('show');
 }
 
 function quickAdd(){
   resetForm();
-  document.getElementById('f_status').value = lastMainScreen==='istek' ? 'wishlist' : 'owned';
+  document.getElementById('f_status').value = lastMainScreen==='istek' ? 'wishlist' : (lastMainScreen==='takas' ? 'trade' : 'owned');
   goTo('ekle');
 }
 
@@ -10506,6 +10522,41 @@ function itemValue(item){
   return est ? {amount: est, isEstimate:true} : null;
 }
 
+/* ---------- DÖVİZ ---------- */
+async function loadFxRates(){
+  try{
+    const cached = localStorage.getItem('primegaraj_fx');
+    if(cached){
+      const parsed = JSON.parse(cached);
+      const cacheDate = new Date(parsed.date).toDateString();
+      if(cacheDate === new Date().toDateString()){
+        fxRates = parsed.rates;
+        return;
+      }
+    }
+  }catch(e){}
+  try{
+    const res = await fetch('https://open.er-api.com/v6/latest/TRY');
+    const data = await res.json();
+    if(data && data.rates && data.rates.USD && data.rates.EUR){
+      fxRates = {USD: data.rates.USD, EUR: data.rates.EUR};
+      localStorage.setItem('primegaraj_fx', JSON.stringify({date: new Date().toISOString(), rates: fxRates}));
+      // Ekranda para birimi gösteren yerleri tazele
+      renderAll();
+      if(document.getElementById('screen-panel').classList.contains('active')) renderPanel();
+    }
+  }catch(e){
+    console.log('Döviz kuru alınamadı (internet yoksa normal):', e.message);
+  }
+}
+
+function fxLine(amountTRY){
+  if(!fxRates) return '';
+  const usd = (amountTRY*fxRates.USD).toFixed(2);
+  const eur = (amountTRY*fxRates.EUR).toFixed(2);
+  return `<div class="amount-fx">≈ $${usd} · €${eur}</div>`;
+}
+
 function rarityValue(rarity, purchasePrice){
   if(!purchasePrice || purchasePrice<=0) return null;
   const mult = {Normal:1.15, TH:3.5, STH:9, Chase:4.5, Premium:1.6}[rarity] || 1.15;
@@ -10522,6 +10573,8 @@ function cardHTML(v){
   const actions = `
     <div class="actions">
       ${v.status==='wishlist' ? `<button class="primary" onclick="moveToOwned('${v.id}')">Satın Aldım</button>` : ''}
+      ${v.status==='trade' ? `<button class="primary" onclick="moveToOwned('${v.id}')">↩️ Geri Al</button>` : ''}
+      ${v.status==='owned' ? `<button onclick="moveToTrade('${v.id}')">🔄 Takasa Çıkar</button>` : ''}
       <button onclick="editItem('${v.id}')">Düzenle</button>
       <button onclick="openHistory('${v.id}')">📈 Geçmiş</button>
     </div>`;
@@ -10530,6 +10583,7 @@ function cardHTML(v){
           <div>
             <div class="label">${val.isEstimate ? 'Kaba Tahmin' : 'Güncel Değer'}</div>
             <div class="amount">₺${val.amount.toLocaleString('tr-TR')}</div>
+            ${fxLine(val.amount)}
           </div>
         </div>` : `
         <div class="value-row">
@@ -10583,6 +10637,7 @@ function sortItems(list, mode){
 function renderAll(){
   let owned = items.filter(i=>i.status==='owned');
   let wishlist = items.filter(i=>i.status==='wishlist');
+  let trade = items.filter(i=>i.status==='trade');
 
   const kSearchEl = document.getElementById('kSearch');
   const kSortEl = document.getElementById('kSort');
@@ -10592,6 +10647,10 @@ function renderAll(){
   const iSearchEl = document.getElementById('iSearch');
   if(iSearchEl) wishlist = wishlist.filter(i=>matches(i, iSearchEl.value));
   wishlist = sortItems(wishlist, 'new');
+
+  const tSearchEl = document.getElementById('tSearch');
+  if(tSearchEl) trade = trade.filter(i=>matches(i, tSearchEl.value));
+  trade = sortItems(trade, 'new');
 
   const kList = document.getElementById('koleksiyonList');
   kList.innerHTML = owned.length ? owned.map(cardHTML).join('') : `
@@ -10608,6 +10667,16 @@ function renderAll(){
       <h3>İstek listesi boş</h3>
       <p>Almak istediğin modelleri buraya ekle,<br>bulduğunda "Satın Aldım" de.</p>
     </div>`;
+
+  const tList = document.getElementById('takasList');
+  if(tList){
+    tList.innerHTML = trade.length ? trade.map(cardHTML).join('') : `
+      <div class="empty">
+        <div class="plate">TAKAS</div>
+        <h3>Takas listesi boş</h3>
+        <p>Elden çıkarmak istediğin modelleri<br>koleksiyonundan "Takasa Çıkar" ile buraya taşı.</p>
+      </div>`;
+  }
 }
 
 /* ---------- VERİTABANI ---------- */
@@ -10675,7 +10744,7 @@ function addFromDB(idx, status){
   persistItems();
   renderAll();
   if(status==='owned') celebrate();
-  goTo(status==='owned' ? 'koleksiyon' : 'istek');
+  goTo(status==='owned' ? 'koleksiyon' : (status==='trade' ? 'takas' : 'istek'));
 }
 
 /* ---------- CUSTOM EKLE / DÜZENLE ---------- */
@@ -10764,7 +10833,7 @@ function saveCustom(){
   renderAll();
   resetForm();
   if(status==='owned') celebrate();
-  goTo(status==='owned' ? 'koleksiyon' : 'istek');
+  goTo(status==='owned' ? 'koleksiyon' : (status==='trade' ? 'takas' : 'istek'));
 }
 
 function toggleFavorite(id){
@@ -10954,9 +11023,16 @@ function celebrate(){
 
 function moveToOwned(id){
   const it = items.find(i=>i.id===id);
-  if(it) it.status='owned';
+  if(!it) return;
+  const wasWishlist = it.status==='wishlist';
+  it.status='owned';
   persistItems(); renderAll();
-  celebrate();
+  if(wasWishlist) celebrate();
+}
+function moveToTrade(id){
+  const it = items.find(i=>i.id===id);
+  if(it) it.status='trade';
+  persistItems(); renderAll();
 }
 function deleteItem(id){
   items = items.filter(i=>i.id!==id);
@@ -11015,6 +11091,7 @@ function renderPanel(){
 
   document.getElementById('statCount').innerText = owned.length;
   document.getElementById('statValue').innerText = '₺'+totalValue.toLocaleString('tr-TR');
+  document.getElementById('statValueFx').innerHTML = fxLine(totalValue);
   document.getElementById('statWishlist').innerText = wishlist.length;
   document.getElementById('statRare').innerText = rareCount;
 
@@ -11180,6 +11257,7 @@ function importBackup(event){
 loadItems();
 renderBrandChips();
 loadTheme();
+loadFxRates();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
