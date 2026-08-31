@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ademeymenyilmaz0619-web.github.io/Prime-Garaj/sitemap.xml
