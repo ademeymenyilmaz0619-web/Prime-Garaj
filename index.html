@@ -15,7 +15,20 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ademeymenyilmaz0619-web.github.io/Prime-Garaj/">
 <meta property="og:image" content="https://ademeymenyilmaz0619-web.github.io/Prime-Garaj/icon-512.png">
+<meta property="og:site_name" content="Prime Garaj">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Prime Garaj">
+
+<!-- Google'a sitenin resmi adının "Prime Garaj" olduğunu net belirtmek için -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Prime Garaj",
+  "alternateName": "Prime Garaj — Hot Wheels ve Diecast Koleksiyon Takip Uygulaması",
+  "url": "https://ademeymenyilmaz0619-web.github.io/Prime-Garaj/"
+}
+</script>
 
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json">
@@ -253,34 +266,34 @@ nav.bottom button svg{ width:17px; height:17px; }
   <div class="screen active" id="screen-koleksiyon">
     <div id="onThisDay"></div>
     <div class="searchbar">
-      <input type="text" id="kSearch" placeholder="Koleksiyonda ara..." oninput="renderAll()">
+      <input type="text" id="kSearch" data-i18n-ph="search_koleksiyon" placeholder="Koleksiyonda ara..." oninput="renderAll()">
       <select id="kSort" onchange="renderAll()">
-        <option value="new">Yeni Eklenen</option>
-        <option value="favorite">Favoriler Önce</option>
-        <option value="valueDesc">Değer (Yüksek→Düşük)</option>
-        <option value="rarity">Nadirlik</option>
-        <option value="az">A-Z</option>
+        <option value="new" data-i18n="sort_new">Yeni Eklenen</option>
+        <option value="favorite" data-i18n="sort_fav">Favoriler Önce</option>
+        <option value="valueDesc" data-i18n="sort_value">Değer (Yüksek→Düşük)</option>
+        <option value="rarity" data-i18n="sort_rarity">Nadirlik</option>
+        <option value="az" data-i18n="sort_az">A-Z</option>
       </select>
     </div>
-    <button class="btn secondary" id="compareToggleBtn" onclick="toggleCompareMode()" style="margin-bottom:14px">⚖️ Karşılaştırma Modu</button>
+    <button class="btn secondary" id="compareToggleBtn" onclick="toggleCompareMode()" style="margin-bottom:14px">⚖️ <span data-i18n="compare_mode">Karşılaştırma Modu</span></button>
     <div id="koleksiyonList"></div>
   </div>
 
   <!-- VERİTABANI -->
   <div class="screen" id="screen-db">
     <div class="searchbar">
-      <input type="text" id="dbSearch" placeholder="Model ara (örn: Camaro)" oninput="dbRenderLimit=60; renderDB()">
+      <input type="text" id="dbSearch" data-i18n-ph="search_db" placeholder="Model ara (örn: Camaro)" oninput="dbRenderLimit=60; renderDB()">
     </div>
     <div class="chip-row" id="brandChips"></div>
     <div id="dbList"></div>
-    <div class="hint" style="margin-top:16px">Bu, genişleyebilen bir örnek veritabanı — burada olmayan bir modeli "Kendi Modelini Ekle" ile istediğin sekmeye özel olarak ekleyebilirsin.</div>
-    <button class="btn secondary" onclick="goTo('ekle')">+ Kendi Modelini Ekle</button>
+    <div class="hint" style="margin-top:16px" data-i18n="db_hint">Bu, genişleyebilen bir örnek veritabanı — burada olmayan bir modeli "Kendi Modelini Ekle" ile istediğin sekmeye özel olarak ekleyebilirsin.</div>
+    <button class="btn secondary" onclick="goTo('ekle')">+ <span data-i18n="add_own_model">Kendi Modelini Ekle</span></button>
   </div>
 
   <!-- İSTEK LİSTESİ -->
   <div class="screen" id="screen-istek">
     <div class="searchbar">
-      <input type="text" id="iSearch" placeholder="İstek listesinde ara..." oninput="renderAll()">
+      <input type="text" id="iSearch" data-i18n-ph="search_istek" placeholder="İstek listesinde ara..." oninput="renderAll()">
     </div>
     <div id="istekList"></div>
   </div>
@@ -289,24 +302,24 @@ nav.bottom button svg{ width:17px; height:17px; }
   <div class="screen" id="screen-ekle">
     <div class="form-header">
       <div class="back" onclick="cancelForm()">←</div>
-      <h2 id="formTitle">Model Ekle</h2>
+      <h2 id="formTitle" data-i18n="add_model_title">Model Ekle</h2>
     </div>
 
     <label class="photo-input" id="photoBox">
-      <span id="photoBoxText">📷 Fotoğraf ekle (opsiyonel)</span>
+      <span id="photoBoxText" data-i18n="add_photo">📷 Fotoğraf ekle (opsiyonel)</span>
       <input type="file" accept="image/*" onchange="handlePhoto(event)">
     </label>
 
-    <div class="field"><label>Marka</label><input type="text" id="f_brand" placeholder="Örn: Hot Wheels, Matchbox, Tomica"></div>
-    <div class="field"><label>Model / Casting Adı</label><input type="text" id="f_name" placeholder="Örn: '67 Camaro"></div>
+    <div class="field"><label data-i18n="lbl_brand">Marka</label><input type="text" id="f_brand" data-i18n-ph="ph_brand" placeholder="Örn: Hot Wheels, Matchbox, Tomica"></div>
+    <div class="field"><label data-i18n="lbl_name">Model / Casting Adı</label><input type="text" id="f_name" data-i18n-ph="ph_name" placeholder="Örn: '67 Camaro"></div>
     <div class="row2">
-      <div class="field"><label>Seri</label><input type="text" id="f_series" placeholder="Örn: Fast & Furious"></div>
-      <div class="field"><label>Çıkış Yılı</label><input type="number" id="f_year" placeholder="2023"></div>
+      <div class="field"><label data-i18n="lbl_series">Seri</label><input type="text" id="f_series" data-i18n-ph="ph_series" placeholder="Örn: Fast & Furious"></div>
+      <div class="field"><label data-i18n="lbl_year">Çıkış Yılı</label><input type="number" id="f_year" placeholder="2023"></div>
     </div>
     <div class="row2">
-      <div class="field"><label>Renk</label><input type="text" id="f_color" placeholder="Kırmızı"></div>
+      <div class="field"><label data-i18n="lbl_color">Renk</label><input type="text" id="f_color" data-i18n-ph="ph_color" placeholder="Kırmızı"></div>
       <div class="field">
-        <label>Nadirlik</label>
+        <label data-i18n="lbl_rarity">Nadirlik</label>
         <select id="f_rarity">
           <option value="Normal">Normal</option>
           <option value="TH">Treasure Hunt</option>
@@ -317,60 +330,72 @@ nav.bottom button svg{ width:17px; height:17px; }
       </div>
     </div>
     <div class="row2">
-      <div class="field"><label>Alış Fiyatı (₺)</label><input type="number" id="f_price" placeholder="50"></div>
+      <div class="field"><label data-i18n="lbl_buyprice">Alış Fiyatı (₺)</label><input type="number" id="f_price" placeholder="50"></div>
       <div class="field">
-        <label>Durum</label>
+        <label data-i18n="lbl_status">Durum</label>
         <select id="f_status">
-          <option value="owned">Koleksiyonumda</option>
-          <option value="wishlist">İstek Listesi</option>
-          <option value="trade">Takas Listesi</option>
+          <option value="owned" data-i18n="status_owned">Koleksiyonumda</option>
+          <option value="wishlist" data-i18n="status_wishlist">İstek Listesi</option>
+          <option value="trade" data-i18n="status_trade">Takas Listesi</option>
         </select>
       </div>
     </div>
     <div class="field">
-      <label>Güncel Piyasa Değeri (₺) — opsiyonel</label>
-      <input type="number" id="f_marketvalue" placeholder="Boş bırakırsan kaba tahmin gösterilir">
+      <label data-i18n="lbl_marketvalue">Güncel Piyasa Değeri (₺) — opsiyonel</label>
+      <input type="number" id="f_marketvalue" data-i18n-ph="ph_marketvalue" placeholder="Boş bırakırsan kaba tahmin gösterilir">
     </div>
-    <div class="hint">Bu modelin gerçek güncel değerini biliyorsan (eBay, hobiDB, ilan sitelerinden) buraya yaz — uygulama her zaman bunu formül tahminine tercih eder.</div>
+    <div class="hint" data-i18n="hint_marketvalue">Bu modelin gerçek güncel değerini biliyorsan (eBay, hobiDB, ilan sitelerinden) buraya yaz — uygulama her zaman bunu formül tahminine tercih eder.</div>
 
     <div class="field">
-      <label>Etiketler — opsiyonel, virgülle ayır</label>
-      <input type="text" id="f_tags" placeholder="Örn: Rafta, Kutulu, Nadir">
+      <label data-i18n="lbl_tags">Etiketler — opsiyonel, virgülle ayır</label>
+      <input type="text" id="f_tags" data-i18n-ph="ph_tags" placeholder="Örn: Rafta, Kutulu, Nadir">
     </div>
 
-    <button class="btn" id="saveBtn" onclick="saveCustom()">Kaydet</button>
+    <button class="btn" id="saveBtn" onclick="saveCustom()" data-i18n="btn_save">Kaydet</button>
   </div>
 
   <!-- PANEL -->
   <div class="screen" id="screen-panel">
     <div class="theme-row">
-      <span class="lbl2">🌓 Açık Tema</span>
+      <span class="lbl2" data-i18n="lang_label">🌐 Dil</span>
+      <select id="langSelect" onchange="setLanguage(this.value)" style="background:var(--surface-2); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-family:'Inter',sans-serif;">
+        <option value="tr">Türkçe</option>
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="fr">Français</option>
+        <option value="ar">العربية</option>
+        <option value="zh">中文</option>
+        <option value="ru">Русский</option>
+      </select>
+    </div>
+    <div class="theme-row">
+      <span class="lbl2" data-i18n="light_theme">🌓 Açık Tema</span>
       <label class="switch">
         <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
         <span class="slider"></span>
       </label>
     </div>
     <div class="stat-grid">
-      <div class="stat-card"><div class="num" id="statCount">0</div><div class="lbl">Koleksiyonda</div></div>
-      <div class="stat-card"><div class="num" id="statValue">₺0</div><div class="lbl">Tahmini Değer</div><div class="amount-fx" id="statValueFx"></div></div>
-      <div class="stat-card"><div class="num" id="statWishlist">0</div><div class="lbl">İstek Listesi</div></div>
-      <div class="stat-card"><div class="num" id="statRare">0</div><div class="lbl">Nadir Parça (TH/STH/Chase)</div></div>
+      <div class="stat-card"><div class="num" id="statCount">0</div><div class="lbl" data-i18n="stat_in_collection">Koleksiyonda</div></div>
+      <div class="stat-card"><div class="num" id="statValue">₺0</div><div class="lbl" data-i18n="stat_est_value">Tahmini Değer</div><div class="amount-fx" id="statValueFx"></div></div>
+      <div class="stat-card"><div class="num" id="statWishlist">0</div><div class="lbl" data-i18n="stat_wishlist">İstek Listesi</div></div>
+      <div class="stat-card"><div class="num" id="statRare">0</div><div class="lbl" data-i18n="stat_rare">Nadir Parça (TH/STH/Chase)</div></div>
     </div>
-    <div class="section-title">Rozetler / Başarımlar</div>
+    <div class="section-title" data-i18n="section_badges">Rozetler / Başarımlar</div>
     <div class="badge-grid" id="achievementGrid"></div>
-    <div class="section-title">En Değerli 5</div>
+    <div class="section-title" data-i18n="section_top5">En Değerli 5</div>
     <div id="topFiveList"></div>
-    <div class="section-title">Nadirlik Dağılımı</div>
+    <div class="section-title" data-i18n="section_rarity_dist">Nadirlik Dağılımı</div>
     <div id="rarityBars"></div>
-    <div class="section-title">Marka Dağılımı</div>
+    <div class="section-title" data-i18n="section_brand_dist">Marka Dağılımı</div>
     <div id="brandBars"></div>
-    <div class="disclaimer">Değer tahminleri, girdiğin alış fiyatı ve nadirlik tipine göre kabaca hesaplanan hobici tahminleridir; gerçek koleksiyoncu piyasasını (eBay, hobiDB vb.) yansıtmaz. Belirli bir parçanın güncel fiyatını öğrenmek istersen sohbette benden araştırmamı isteyebilirsin.</div>
+    <div class="disclaimer" data-i18n="disclaimer_value">Değer tahminleri, girdiğin alış fiyatı ve nadirlik tipine göre kabaca hesaplanan hobici tahminleridir; gerçek koleksiyoncu piyasasını (eBay, hobiDB vb.) yansıtmaz. Belirli bir parçanın güncel fiyatını öğrenmek istersen sohbette benden araştırmamı isteyebilirsin.</div>
 
-    <div class="section-title">Yedekleme</div>
-    <div class="hint" style="margin-top:0">Koleksiyonun sadece bu telefonda saklanıyor. Telefon değişirse ya da uygulama silinirse veriler kaybolur — düzenli yedek almanı öneririm.</div>
-    <button class="btn secondary" onclick="exportBackup()">📤 Yedek Al (Dosya İndir)</button>
+    <div class="section-title" data-i18n="section_backup">Yedekleme</div>
+    <div class="hint" style="margin-top:0" data-i18n="hint_backup">Koleksiyonun sadece bu telefonda saklanıyor. Telefon değişirse ya da uygulama silinirse veriler kaybolur — düzenli yedek almanı öneririm.</div>
+    <button class="btn secondary" onclick="exportBackup()">📤 <span data-i18n="btn_export">Yedek Al (Dosya İndir)</span></button>
     <label class="photo-input" style="margin-top:10px">
-      <span>📥 Yedekten Geri Yükle</span>
+      <span>📥 <span data-i18n="btn_import">Yedekten Geri Yükle</span></span>
       <input type="file" accept="application/json,.json" onchange="importBackup(event)">
     </label>
   </div>
@@ -378,17 +403,17 @@ nav.bottom button svg{ width:17px; height:17px; }
   <!-- TAKAS LİSTESİ -->
   <div class="screen" id="screen-takas">
     <div class="searchbar">
-      <input type="text" id="tSearch" placeholder="Takas listesinde ara..." oninput="renderAll()">
+      <input type="text" id="tSearch" data-i18n-ph="search_takas" placeholder="Takas listesinde ara..." oninput="renderAll()">
     </div>
-    <div class="hint" style="margin-top:0">Elden çıkarmak/takas etmek istediğin modeller burada listelenir.</div>
+    <div class="hint" style="margin-top:0" data-i18n="hint_takas">Elden çıkarmak/takas etmek istediğin modeller burada listelenir.</div>
     <div id="takasList"></div>
   </div>
 
   <!-- SOR (Claude'a hızlı soru) -->
   <div class="screen" id="screen-sor">
-    <div class="hint" style="margin-top:0">Bir modelin gerçek güncel piyasa değerini merak ediyorsan, aşağıdan seç — soru otomatik hazırlanıp panoya kopyalanır, Claude açılır, sadece yapıştırıp gönderirsin.</div>
-    <button class="btn secondary" onclick="askClaudeGeneric()" style="margin-bottom:16px">💬 Genel Soru Sor (Claude'u Aç)</button>
-    <div class="section-title">Koleksiyonundan Seç</div>
+    <div class="hint" style="margin-top:0" data-i18n="hint_sor">Bir modelin gerçek güncel piyasa değerini merak ediyorsan, aşağıdan seç — soru otomatik hazırlanıp panoya kopyalanır, Claude açılır, sadece yapıştırıp gönderirsin.</div>
+    <button class="btn secondary" onclick="askClaudeGeneric()" style="margin-bottom:16px">💬 <span data-i18n="btn_ask_generic">Genel Soru Sor (Claude'u Aç)</span></button>
+    <div class="section-title" data-i18n="section_pick_collection">Koleksiyonundan Seç</div>
     <div id="sorList"></div>
   </div>
 
@@ -396,31 +421,31 @@ nav.bottom button svg{ width:17px; height:17px; }
   <div class="screen" id="screen-history">
     <div class="form-header">
       <div class="back" onclick="goTo(lastMainScreen)">←</div>
-      <h2 id="historyTitle">Fiyat Geçmişi</h2>
+      <h2 id="historyTitle" data-i18n="history_title">Fiyat Geçmişi</h2>
     </div>
     <div id="historyList"></div>
-    <div class="section-title">Yeni Kayıt Ekle</div>
-    <div class="hint" style="margin-top:0">eBay, hobiDB ya da bir ilanda gördüğün fiyatı buraya not edebilirsin.</div>
+    <div class="section-title" data-i18n="section_new_record">Yeni Kayıt Ekle</div>
+    <div class="hint" style="margin-top:0" data-i18n="hint_history">eBay, hobiDB ya da bir ilanda gördüğün fiyatı buraya not edebilirsin.</div>
     <div class="row2">
-      <div class="field"><label>Değer (₺)</label><input type="number" id="h_amount" placeholder="150"></div>
-      <div class="field"><label>Tarih</label><input type="date" id="h_date"></div>
+      <div class="field"><label data-i18n="lbl_value">Değer (₺)</label><input type="number" id="h_amount" placeholder="150"></div>
+      <div class="field"><label data-i18n="lbl_date">Tarih</label><input type="date" id="h_date"></div>
     </div>
-    <div class="field"><label>Not — opsiyonel</label><input type="text" id="h_note" placeholder="Örn: eBay ilanı"></div>
-    <button class="btn" onclick="addHistoryEntry()">Kayıt Ekle</button>
+    <div class="field"><label data-i18n="lbl_note">Not — opsiyonel</label><input type="text" id="h_note" data-i18n-ph="ph_note" placeholder="Örn: eBay ilanı"></div>
+    <button class="btn" onclick="addHistoryEntry()" data-i18n="btn_add_record">Kayıt Ekle</button>
   </div>
 
   <!-- KARŞILAŞTIRMA -->
   <div class="screen" id="screen-compare">
     <div class="form-header">
       <div class="back" onclick="goTo('koleksiyon')">←</div>
-      <h2>Karşılaştırma</h2>
+      <h2 data-i18n="compare_title">Karşılaştırma</h2>
     </div>
     <div id="compareContent"></div>
   </div>
 
   <div class="compare-bar" id="compareBar" onclick="openCompare()">
-    <span id="compareBarText">0/2 seçili</span>
-    <span>Karşılaştır →</span>
+    <span id="compareBarText" data-i18n-tpl="compare_selected">0/2 seçili</span>
+    <span data-i18n="compare_go">Karşılaştır →</span>
   </div>
 
   <button class="fab-add" id="fabAdd" onclick="quickAdd()">+</button>
@@ -428,33 +453,289 @@ nav.bottom button svg{ width:17px; height:17px; }
   <nav class="bottom">
     <button class="nav-btn active" data-screen="koleksiyon" onclick="goTo('koleksiyon')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>
-      Koleksiyon
+      <span data-i18n="nav_collection">Koleksiyon</span>
     </button>
     <button class="nav-btn" data-screen="db" onclick="goTo('db')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>
-      Veritabanı
+      <span data-i18n="nav_db">Veritabanı</span>
     </button>
     <button class="nav-btn" data-screen="istek" onclick="goTo('istek')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"/></svg>
-      İstek
+      <span data-i18n="nav_wishlist">İstek</span>
     </button>
     <button class="nav-btn" data-screen="takas" onclick="goTo('takas')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
-      Takas
+      <span data-i18n="nav_trade">Takas</span>
     </button>
     <button class="nav-btn" data-screen="sor" onclick="goTo('sor')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-      Sor
+      <span data-i18n="nav_ask">Sor</span>
     </button>
     <button class="nav-btn" data-screen="panel" onclick="goTo('panel')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-5 3 3 5-7"/></svg>
-      Panel
+      <span data-i18n="nav_panel">Panel</span>
     </button>
   </nav>
 
 </div>
 
 <script>
+/* ===================== i18n / ÇOKLU DİL SİSTEMİ ===================== */
+const TRANSLATIONS = {
+  tr: {
+    search_koleksiyon:"Koleksiyonda ara...", sort_new:"Yeni Eklenen", sort_fav:"Favoriler Önce", sort_value:"Değer (Yüksek→Düşük)", sort_rarity:"Nadirlik", sort_az:"A-Z",
+    compare_mode:"Karşılaştırma Modu",
+    search_db:"Model ara (örn: Camaro)", db_hint:"Bu, genişleyebilen bir örnek veritabanı — burada olmayan bir modeli \"Kendi Modelini Ekle\" ile istediğin sekmeye özel olarak ekleyebilirsin.", add_own_model:"Kendi Modelini Ekle",
+    search_istek:"İstek listesinde ara...",
+    add_model_title:"Model Ekle", add_photo:"📷 Fotoğraf ekle (opsiyonel)",
+    lbl_brand:"Marka", ph_brand:"Örn: Hot Wheels, Matchbox, Tomica",
+    lbl_name:"Model / Casting Adı", ph_name:"Örn: '67 Camaro",
+    lbl_series:"Seri", ph_series:"Örn: Fast & Furious",
+    lbl_year:"Çıkış Yılı",
+    lbl_color:"Renk", ph_color:"Kırmızı",
+    lbl_rarity:"Nadirlik",
+    lbl_buyprice:"Alış Fiyatı (₺)",
+    lbl_status:"Durum", status_owned:"Koleksiyonumda", status_wishlist:"İstek Listesi", status_trade:"Takas Listesi",
+    lbl_marketvalue:"Güncel Piyasa Değeri (₺) — opsiyonel", ph_marketvalue:"Boş bırakırsan kaba tahmin gösterilir",
+    hint_marketvalue:"Bu modelin gerçek güncel değerini biliyorsan (eBay, hobiDB, ilan sitelerinden) buraya yaz — uygulama her zaman bunu formül tahminine tercih eder.",
+    lbl_tags:"Etiketler — opsiyonel, virgülle ayır", ph_tags:"Örn: Rafta, Kutulu, Nadir",
+    btn_save:"Kaydet",
+    lang_label:"🌐 Dil", light_theme:"🌓 Açık Tema",
+    stat_in_collection:"Koleksiyonda", stat_est_value:"Tahmini Değer", stat_wishlist:"İstek Listesi", stat_rare:"Nadir Parça (TH/STH/Chase)",
+    section_badges:"Rozetler / Başarımlar", section_top5:"En Değerli 5", section_rarity_dist:"Nadirlik Dağılımı", section_brand_dist:"Marka Dağılımı",
+    disclaimer_value:"Değer tahminleri, girdiğin alış fiyatı ve nadirlik tipine göre kabaca hesaplanan hobici tahminleridir; gerçek koleksiyoncu piyasasını (eBay, hobiDB vb.) yansıtmaz. Belirli bir parçanın güncel fiyatını öğrenmek istersen sohbette benden araştırmamı isteyebilirsin.",
+    section_backup:"Yedekleme", hint_backup:"Koleksiyonun sadece bu telefonda saklanıyor. Telefon değişirse ya da uygulama silinirse veriler kaybolur — düzenli yedek almanı öneririm.",
+    btn_export:"Yedek Al (Dosya İndir)", btn_import:"Yedekten Geri Yükle",
+    search_takas:"Takas listesinde ara...", hint_takas:"Elden çıkarmak/takas etmek istediğin modeller burada listelenir.",
+    hint_sor:"Bir modelin gerçek güncel piyasa değerini merak ediyorsan, aşağıdan seç — soru otomatik hazırlanıp panoya kopyalanır, Claude açılır, sadece yapıştırıp gönderirsin.",
+    btn_ask_generic:"Genel Soru Sor (Claude'u Aç)", section_pick_collection:"Koleksiyonundan Seç",
+    history_title:"Fiyat Geçmişi", section_new_record:"Yeni Kayıt Ekle", hint_history:"eBay, hobiDB ya da bir ilanda gördüğün fiyatı buraya not edebilirsin.",
+    lbl_value:"Değer (₺)", lbl_date:"Tarih", lbl_note:"Not — opsiyonel", ph_note:"Örn: eBay ilanı", btn_add_record:"Kayıt Ekle",
+    compare_title:"Karşılaştırma", compare_selected:"{n}/2 seçili", compare_go:"Karşılaştır →",
+    nav_collection:"Koleksiyon", nav_db:"Veritabanı", nav_wishlist:"İstek", nav_trade:"Takas", nav_ask:"Sor", nav_panel:"Panel"
+  },
+  en: {
+    search_koleksiyon:"Search collection...", sort_new:"Recently Added", sort_fav:"Favorites First", sort_value:"Value (High→Low)", sort_rarity:"Rarity", sort_az:"A-Z",
+    compare_mode:"Compare Mode",
+    search_db:"Search model (e.g. Camaro)", db_hint:"This is an expandable sample database — you can add a model that isn't here to any tab using \"Add Your Own Model\".", add_own_model:"Add Your Own Model",
+    search_istek:"Search wishlist...",
+    add_model_title:"Add Model", add_photo:"📷 Add photo (optional)",
+    lbl_brand:"Brand", ph_brand:"e.g. Hot Wheels, Matchbox, Tomica",
+    lbl_name:"Model / Casting Name", ph_name:"e.g. '67 Camaro",
+    lbl_series:"Series", ph_series:"e.g. Fast & Furious",
+    lbl_year:"Release Year",
+    lbl_color:"Color", ph_color:"Red",
+    lbl_rarity:"Rarity",
+    lbl_buyprice:"Purchase Price (₺)",
+    lbl_status:"Status", status_owned:"In My Collection", status_wishlist:"Wishlist", status_trade:"Trade List",
+    lbl_marketvalue:"Current Market Value (₺) — optional", ph_marketvalue:"Leave blank for a rough estimate",
+    hint_marketvalue:"If you know this model's real current value (from eBay, hobbyDB, listings), enter it here — the app always prefers it over the formula estimate.",
+    lbl_tags:"Tags — optional, comma separated", ph_tags:"e.g. On shelf, Boxed, Rare",
+    btn_save:"Save",
+    lang_label:"🌐 Language", light_theme:"🌓 Light Theme",
+    stat_in_collection:"In Collection", stat_est_value:"Estimated Value", stat_wishlist:"Wishlist", stat_rare:"Rare Items (TH/STH/Chase)",
+    section_badges:"Badges / Achievements", section_top5:"Top 5 Most Valuable", section_rarity_dist:"Rarity Distribution", section_brand_dist:"Brand Distribution",
+    disclaimer_value:"Value estimates are rough hobbyist guesses based on your purchase price and rarity type; they don't reflect the real collector market (eBay, hobbyDB, etc.). Ask me in chat to look up a specific item's current price if you want.",
+    section_backup:"Backup", hint_backup:"Your collection is stored only on this phone. If you change phones or delete the app, the data is lost — I recommend backing up regularly.",
+    btn_export:"Export Backup (Download File)", btn_import:"Restore From Backup",
+    search_takas:"Search trade list...", hint_takas:"Models you want to give away or trade are listed here.",
+    hint_sor:"If you're curious about a model's real current market value, pick one below — the question is prepared automatically and copied, Claude opens, just paste and send.",
+    btn_ask_generic:"Ask a General Question (Open Claude)", section_pick_collection:"Pick From Your Collection",
+    history_title:"Price History", section_new_record:"Add New Entry", hint_history:"You can note a price you saw on eBay, hobbyDB, or a listing here.",
+    lbl_value:"Value (₺)", lbl_date:"Date", lbl_note:"Note — optional", ph_note:"e.g. eBay listing", btn_add_record:"Add Entry",
+    compare_title:"Compare", compare_selected:"{n}/2 selected", compare_go:"Compare →",
+    nav_collection:"Collection", nav_db:"Database", nav_wishlist:"Wishlist", nav_trade:"Trade", nav_ask:"Ask", nav_panel:"Panel"
+  },
+  de: {
+    search_koleksiyon:"Sammlung durchsuchen...", sort_new:"Zuletzt hinzugefügt", sort_fav:"Favoriten zuerst", sort_value:"Wert (Hoch→Niedrig)", sort_rarity:"Seltenheit", sort_az:"A-Z",
+    compare_mode:"Vergleichsmodus",
+    search_db:"Modell suchen (z.B. Camaro)", db_hint:"Dies ist eine erweiterbare Beispieldatenbank — ein fehlendes Modell kannst du über \"Eigenes Modell hinzufügen\" in jeden Tab einfügen.", add_own_model:"Eigenes Modell hinzufügen",
+    search_istek:"Wunschliste durchsuchen...",
+    add_model_title:"Modell hinzufügen", add_photo:"📷 Foto hinzufügen (optional)",
+    lbl_brand:"Marke", ph_brand:"z.B. Hot Wheels, Matchbox, Tomica",
+    lbl_name:"Modell-/Casting-Name", ph_name:"z.B. '67 Camaro",
+    lbl_series:"Serie", ph_series:"z.B. Fast & Furious",
+    lbl_year:"Erscheinungsjahr",
+    lbl_color:"Farbe", ph_color:"Rot",
+    lbl_rarity:"Seltenheit",
+    lbl_buyprice:"Kaufpreis (₺)",
+    lbl_status:"Status", status_owned:"In meiner Sammlung", status_wishlist:"Wunschliste", status_trade:"Tauschliste",
+    lbl_marketvalue:"Aktueller Marktwert (₺) — optional", ph_marketvalue:"Leer lassen für eine grobe Schätzung",
+    hint_marketvalue:"Wenn du den echten aktuellen Wert dieses Modells kennst (eBay, hobbyDB, Anzeigen), trag ihn hier ein — die App bevorzugt ihn immer gegenüber der Formel-Schätzung.",
+    lbl_tags:"Tags — optional, mit Komma trennen", ph_tags:"z.B. Im Regal, Originalverpackt, Selten",
+    btn_save:"Speichern",
+    lang_label:"🌐 Sprache", light_theme:"🌓 Helles Design",
+    stat_in_collection:"In Sammlung", stat_est_value:"Geschätzter Wert", stat_wishlist:"Wunschliste", stat_rare:"Seltene Teile (TH/STH/Chase)",
+    section_badges:"Abzeichen / Erfolge", section_top5:"Top 5 Wertvollste", section_rarity_dist:"Seltenheitsverteilung", section_brand_dist:"Markenverteilung",
+    disclaimer_value:"Wertschätzungen sind grobe Hobbyisten-Schätzungen basierend auf Kaufpreis und Seltenheitstyp; sie spiegeln nicht den echten Sammlermarkt (eBay, hobbyDB usw.) wider. Frag mich im Chat, wenn du den aktuellen Preis eines bestimmten Teils erfahren willst.",
+    section_backup:"Sicherung", hint_backup:"Deine Sammlung wird nur auf diesem Telefon gespeichert. Bei Telefonwechsel oder App-Löschung gehen die Daten verloren — regelmäßige Backups werden empfohlen.",
+    btn_export:"Backup erstellen (Datei herunterladen)", btn_import:"Aus Backup wiederherstellen",
+    search_takas:"Tauschliste durchsuchen...", hint_takas:"Modelle, die du abgeben oder tauschen möchtest, werden hier aufgelistet.",
+    hint_sor:"Wenn dich der echte aktuelle Marktwert eines Modells interessiert, wähle unten eins aus — die Frage wird automatisch vorbereitet und kopiert, Claude öffnet sich, du musst nur einfügen und senden.",
+    btn_ask_generic:"Allgemeine Frage stellen (Claude öffnen)", section_pick_collection:"Aus deiner Sammlung wählen",
+    history_title:"Preisverlauf", section_new_record:"Neuen Eintrag hinzufügen", hint_history:"Du kannst hier einen Preis notieren, den du bei eBay, hobbyDB oder einer Anzeige gesehen hast.",
+    lbl_value:"Wert (₺)", lbl_date:"Datum", lbl_note:"Notiz — optional", ph_note:"z.B. eBay-Anzeige", btn_add_record:"Eintrag hinzufügen",
+    compare_title:"Vergleich", compare_selected:"{n}/2 ausgewählt", compare_go:"Vergleichen →",
+    nav_collection:"Sammlung", nav_db:"Datenbank", nav_wishlist:"Wunsch", nav_trade:"Tausch", nav_ask:"Fragen", nav_panel:"Panel"
+  },
+  fr: {
+    search_koleksiyon:"Rechercher dans la collection...", sort_new:"Récemment ajoutés", sort_fav:"Favoris d'abord", sort_value:"Valeur (Haut→Bas)", sort_rarity:"Rareté", sort_az:"A-Z",
+    compare_mode:"Mode Comparaison",
+    search_db:"Rechercher un modèle (ex: Camaro)", db_hint:"Ceci est une base de données extensible — tu peux ajouter un modèle absent via \"Ajouter mon modèle\" dans n'importe quel onglet.", add_own_model:"Ajouter mon modèle",
+    search_istek:"Rechercher dans la liste de souhaits...",
+    add_model_title:"Ajouter un modèle", add_photo:"📷 Ajouter une photo (facultatif)",
+    lbl_brand:"Marque", ph_brand:"ex: Hot Wheels, Matchbox, Tomica",
+    lbl_name:"Nom du modèle / casting", ph_name:"ex: '67 Camaro",
+    lbl_series:"Série", ph_series:"ex: Fast & Furious",
+    lbl_year:"Année de sortie",
+    lbl_color:"Couleur", ph_color:"Rouge",
+    lbl_rarity:"Rareté",
+    lbl_buyprice:"Prix d'achat (₺)",
+    lbl_status:"Statut", status_owned:"Dans ma collection", status_wishlist:"Liste de souhaits", status_trade:"Liste d'échange",
+    lbl_marketvalue:"Valeur marchande actuelle (₺) — facultatif", ph_marketvalue:"Laisser vide pour une estimation approximative",
+    hint_marketvalue:"Si tu connais la vraie valeur actuelle de ce modèle (eBay, hobbyDB, annonces), indique-la ici — l'appli la préfère toujours à l'estimation par formule.",
+    lbl_tags:"Étiquettes — facultatif, séparées par des virgules", ph_tags:"ex: En vitrine, En boîte, Rare",
+    btn_save:"Enregistrer",
+    lang_label:"🌐 Langue", light_theme:"🌓 Thème clair",
+    stat_in_collection:"Dans la collection", stat_est_value:"Valeur estimée", stat_wishlist:"Liste de souhaits", stat_rare:"Pièces rares (TH/STH/Chase)",
+    section_badges:"Badges / Succès", section_top5:"Top 5 les plus précieux", section_rarity_dist:"Répartition par rareté", section_brand_dist:"Répartition par marque",
+    disclaimer_value:"Les estimations de valeur sont des approximations basées sur ton prix d'achat et le type de rareté ; elles ne reflètent pas le vrai marché des collectionneurs (eBay, hobbyDB, etc.). Demande-moi dans le chat si tu veux connaître le prix actuel d'une pièce précise.",
+    section_backup:"Sauvegarde", hint_backup:"Ta collection n'est stockée que sur ce téléphone. Si tu changes de téléphone ou supprimes l'appli, les données sont perdues — pense à sauvegarder régulièrement.",
+    btn_export:"Sauvegarder (télécharger le fichier)", btn_import:"Restaurer depuis une sauvegarde",
+    search_takas:"Rechercher dans la liste d'échange...", hint_takas:"Les modèles que tu veux céder ou échanger sont listés ici.",
+    hint_sor:"Si tu veux connaître la vraie valeur marchande actuelle d'un modèle, choisis-en un ci-dessous — la question est préparée et copiée automatiquement, Claude s'ouvre, il ne reste qu'à coller et envoyer.",
+    btn_ask_generic:"Poser une question générale (Ouvrir Claude)", section_pick_collection:"Choisir dans ta collection",
+    history_title:"Historique des prix", section_new_record:"Ajouter une entrée", hint_history:"Tu peux noter ici un prix vu sur eBay, hobbyDB ou une annonce.",
+    lbl_value:"Valeur (₺)", lbl_date:"Date", lbl_note:"Note — facultatif", ph_note:"ex: annonce eBay", btn_add_record:"Ajouter l'entrée",
+    compare_title:"Comparaison", compare_selected:"{n}/2 sélectionnés", compare_go:"Comparer →",
+    nav_collection:"Collection", nav_db:"Base de données", nav_wishlist:"Souhaits", nav_trade:"Échange", nav_ask:"Demander", nav_panel:"Panel"
+  },
+  ar: {
+    search_koleksiyon:"البحث في المجموعة...", sort_new:"الأحدث إضافة", sort_fav:"المفضلة أولاً", sort_value:"القيمة (الأعلى→الأدنى)", sort_rarity:"الندرة", sort_az:"أ-ي",
+    compare_mode:"وضع المقارنة",
+    search_db:"ابحث عن موديل (مثال: Camaro)", db_hint:"هذه قاعدة بيانات نموذجية قابلة للتوسيع — يمكنك إضافة موديل غير موجود هنا عبر \"إضافة موديلك الخاص\" في أي قسم.", add_own_model:"إضافة موديلك الخاص",
+    search_istek:"البحث في قائمة الرغبات...",
+    add_model_title:"إضافة موديل", add_photo:"📷 إضافة صورة (اختياري)",
+    lbl_brand:"العلامة التجارية", ph_brand:"مثال: Hot Wheels, Matchbox, Tomica",
+    lbl_name:"اسم الموديل", ph_name:"مثال: '67 Camaro",
+    lbl_series:"السلسلة", ph_series:"مثال: Fast & Furious",
+    lbl_year:"سنة الإصدار",
+    lbl_color:"اللون", ph_color:"أحمر",
+    lbl_rarity:"الندرة",
+    lbl_buyprice:"سعر الشراء (₺)",
+    lbl_status:"الحالة", status_owned:"في مجموعتي", status_wishlist:"قائمة الرغبات", status_trade:"قائمة التبادل",
+    lbl_marketvalue:"القيمة السوقية الحالية (₺) — اختياري", ph_marketvalue:"اتركه فارغًا لتقدير تقريبي",
+    hint_marketvalue:"إذا كنت تعرف القيمة الحالية الحقيقية لهذا الموديل (من eBay أو hobbyDB أو الإعلانات)، اكتبها هنا — التطبيق يفضلها دائمًا على التقدير بالصيغة الحسابية.",
+    lbl_tags:"الوسوم — اختياري، افصل بفاصلة", ph_tags:"مثال: على الرف، في العلبة، نادر",
+    btn_save:"حفظ",
+    lang_label:"🌐 اللغة", light_theme:"🌓 المظهر الفاتح",
+    stat_in_collection:"في المجموعة", stat_est_value:"القيمة التقديرية", stat_wishlist:"قائمة الرغبات", stat_rare:"قطع نادرة (TH/STH/Chase)",
+    section_badges:"الأوسمة / الإنجازات", section_top5:"أعلى 5 قيمة", section_rarity_dist:"توزيع الندرة", section_brand_dist:"توزيع العلامات التجارية",
+    disclaimer_value:"تقديرات القيمة هي تخمينات تقريبية للهواة بناءً على سعر الشراء ونوع الندرة؛ ولا تعكس سوق الهواة الحقيقي (eBay، hobbyDB، إلخ). يمكنك سؤالي في المحادثة لمعرفة السعر الحالي لقطعة معينة.",
+    section_backup:"النسخ الاحتياطي", hint_backup:"تُحفظ مجموعتك على هذا الهاتف فقط. في حال تغيير الهاتف أو حذف التطبيق ستفقد البيانات — يُنصح بأخذ نسخة احتياطية بانتظام.",
+    btn_export:"أخذ نسخة احتياطية (تنزيل ملف)", btn_import:"استعادة من نسخة احتياطية",
+    search_takas:"البحث في قائمة التبادل...", hint_takas:"الموديلات التي تريد التخلص منها أو تبادلها مدرجة هنا.",
+    hint_sor:"إذا كنت تريد معرفة القيمة السوقية الحالية الحقيقية لموديل ما، اختر واحدًا أدناه — سيتم تحضير السؤال ونسخه تلقائيًا، وسيفتح Claude، فقط الصق وأرسل.",
+    btn_ask_generic:"طرح سؤال عام (فتح Claude)", section_pick_collection:"اختر من مجموعتك",
+    history_title:"سجل الأسعار", section_new_record:"إضافة سجل جديد", hint_history:"يمكنك تدوين سعر رأيته في eBay أو hobbyDB أو أحد الإعلانات هنا.",
+    lbl_value:"القيمة (₺)", lbl_date:"التاريخ", lbl_note:"ملاحظة — اختياري", ph_note:"مثال: إعلان eBay", btn_add_record:"إضافة السجل",
+    compare_title:"مقارنة", compare_selected:"{n}/2 محدد", compare_go:"مقارنة ←",
+    nav_collection:"المجموعة", nav_db:"قاعدة البيانات", nav_wishlist:"الرغبات", nav_trade:"التبادل", nav_ask:"اسأل", nav_panel:"اللوحة"
+  },
+  zh: {
+    search_koleksiyon:"搜索收藏...", sort_new:"最新添加", sort_fav:"收藏优先", sort_value:"价值(高→低)", sort_rarity:"稀有度", sort_az:"A-Z",
+    compare_mode:"比较模式",
+    search_db:"搜索模型(如 Camaro)", db_hint:"这是一个可扩展的示例数据库——你可以通过“添加自己的模型”把这里没有的模型加到任意标签页。", add_own_model:"添加自己的模型",
+    search_istek:"搜索心愿单...",
+    add_model_title:"添加模型", add_photo:"📷 添加照片(可选)",
+    lbl_brand:"品牌", ph_brand:"例如 Hot Wheels, Matchbox, Tomica",
+    lbl_name:"模型/铸造名称", ph_name:"例如 '67 Camaro",
+    lbl_series:"系列", ph_series:"例如 Fast & Furious",
+    lbl_year:"发行年份",
+    lbl_color:"颜色", ph_color:"红色",
+    lbl_rarity:"稀有度",
+    lbl_buyprice:"购买价格 (₺)",
+    lbl_status:"状态", status_owned:"我的收藏", status_wishlist:"心愿单", status_trade:"交换清单",
+    lbl_marketvalue:"当前市场价值 (₺) — 可选", ph_marketvalue:"留空则显示粗略估算",
+    hint_marketvalue:"如果你知道这个模型的真实当前价值(来自eBay、hobbyDB或商品页面),请在此填写——应用会始终优先使用它而非公式估算。",
+    lbl_tags:"标签 — 可选,用逗号分隔", ph_tags:"例如 在架上,原盒,稀有",
+    btn_save:"保存",
+    lang_label:"🌐 语言", light_theme:"🌓 浅色主题",
+    stat_in_collection:"收藏中", stat_est_value:"估计价值", stat_wishlist:"心愿单", stat_rare:"稀有款(TH/STH/Chase)",
+    section_badges:"徽章/成就", section_top5:"最有价值的5件", section_rarity_dist:"稀有度分布", section_brand_dist:"品牌分布",
+    disclaimer_value:"价值估算是根据你输入的购买价格和稀有类型粗略计算出的爱好者估值;并不反映真实的收藏市场行情(eBay、hobbyDB等)。如果你想了解某件特定藏品的当前价格,可以在聊天中让我帮你查一下。",
+    section_backup:"备份", hint_backup:"你的收藏仅保存在此手机上。更换手机或删除应用会导致数据丢失——建议定期备份。",
+    btn_export:"导出备份(下载文件)", btn_import:"从备份恢复",
+    search_takas:"搜索交换清单...", hint_takas:"你想出让或交换的模型会列在这里。",
+    hint_sor:"如果你想知道某个模型的真实当前市场价值,请在下方选择一个——问题会自动生成并复制到剪贴板,Claude会打开,只需粘贴并发送。",
+    btn_ask_generic:"提出一般性问题(打开Claude)", section_pick_collection:"从你的收藏中选择",
+    history_title:"价格历史", section_new_record:"添加新记录", hint_history:"你可以在这里记下在eBay、hobbyDB或商品页面看到的价格。",
+    lbl_value:"价值 (₺)", lbl_date:"日期", lbl_note:"备注 — 可选", ph_note:"例如 eBay商品页", btn_add_record:"添加记录",
+    compare_title:"比较", compare_selected:"已选 {n}/2", compare_go:"比较 →",
+    nav_collection:"收藏", nav_db:"数据库", nav_wishlist:"心愿单", nav_trade:"交换", nav_ask:"提问", nav_panel:"面板"
+  },
+  ru: {
+    search_koleksiyon:"Поиск в коллекции...", sort_new:"Недавно добавленные", sort_fav:"Сначала избранное", sort_value:"Стоимость (выс→низ)", sort_rarity:"Редкость", sort_az:"А-Я",
+    compare_mode:"Режим сравнения",
+    search_db:"Поиск модели (напр. Camaro)", db_hint:"Это расширяемая пример-база данных — модель, которой здесь нет, можно добавить через «Добавить свою модель» на любую вкладку.", add_own_model:"Добавить свою модель",
+    search_istek:"Поиск в списке желаний...",
+    add_model_title:"Добавить модель", add_photo:"📷 Добавить фото (необязательно)",
+    lbl_brand:"Бренд", ph_brand:"напр. Hot Wheels, Matchbox, Tomica",
+    lbl_name:"Название модели/отливки", ph_name:"напр. '67 Camaro",
+    lbl_series:"Серия", ph_series:"напр. Fast & Furious",
+    lbl_year:"Год выпуска",
+    lbl_color:"Цвет", ph_color:"Красный",
+    lbl_rarity:"Редкость",
+    lbl_buyprice:"Цена покупки (₺)",
+    lbl_status:"Статус", status_owned:"В моей коллекции", status_wishlist:"Список желаний", status_trade:"Список обмена",
+    lbl_marketvalue:"Текущая рыночная стоимость (₺) — необязательно", ph_marketvalue:"Оставь пустым для грубой оценки",
+    hint_marketvalue:"Если ты знаешь реальную текущую стоимость этой модели (eBay, hobbyDB, объявления), укажи её здесь — приложение всегда предпочтёт её формуле оценки.",
+    lbl_tags:"Теги — необязательно, через запятую", ph_tags:"напр. На полке, В коробке, Редкая",
+    btn_save:"Сохранить",
+    lang_label:"🌐 Язык", light_theme:"🌓 Светлая тема",
+    stat_in_collection:"В коллекции", stat_est_value:"Оценочная стоимость", stat_wishlist:"Список желаний", stat_rare:"Редкие экземпляры (TH/STH/Chase)",
+    section_badges:"Значки / Достижения", section_top5:"Топ-5 самых ценных", section_rarity_dist:"Распределение по редкости", section_brand_dist:"Распределение по брендам",
+    disclaimer_value:"Оценки стоимости — это грубые любительские прикидки на основе цены покупки и типа редкости; они не отражают реальный рынок коллекционеров (eBay, hobbyDB и т.д.). Спроси меня в чате, если хочешь узнать актуальную цену конкретного экземпляра.",
+    section_backup:"Резервная копия", hint_backup:"Твоя коллекция хранится только на этом телефоне. При смене телефона или удалении приложения данные будут потеряны — рекомендуется регулярно делать резервные копии.",
+    btn_export:"Создать копию (скачать файл)", btn_import:"Восстановить из копии",
+    search_takas:"Поиск в списке обмена...", hint_takas:"Модели, которые ты хочешь отдать или обменять, перечислены здесь.",
+    hint_sor:"Если хочешь узнать реальную текущую рыночную стоимость модели, выбери её ниже — вопрос автоматически подготовится и скопируется, откроется Claude, останется только вставить и отправить.",
+    btn_ask_generic:"Задать общий вопрос (Открыть Claude)", section_pick_collection:"Выбрать из своей коллекции",
+    history_title:"История цен", section_new_record:"Добавить запись", hint_history:"Здесь можно отметить цену, увиденную на eBay, hobbyDB или в объявлении.",
+    lbl_value:"Стоимость (₺)", lbl_date:"Дата", lbl_note:"Заметка — необязательно", ph_note:"напр. объявление eBay", btn_add_record:"Добавить запись",
+    compare_title:"Сравнение", compare_selected:"Выбрано {n}/2", compare_go:"Сравнить →",
+    nav_collection:"Коллекция", nav_db:"База данных", nav_wishlist:"Желания", nav_trade:"Обмен", nav_ask:"Спросить", nav_panel:"Панель"
+  }
+};
+let currentLang = localStorage.getItem('pg_lang') || 'tr';
+
+function applyTranslations(){
+  const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.tr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key]) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-ph');
+    if(dict[key]) el.setAttribute('placeholder', dict[key]);
+  });
+  document.querySelectorAll('[data-i18n-tpl]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-tpl');
+    if(dict[key]) el.textContent = dict[key].replace('{n}', el.textContent.match(/\d+/)?.[0] || '0');
+  });
+  document.documentElement.setAttribute('lang', currentLang);
+  document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+  const sel = document.getElementById('langSelect');
+  if(sel) sel.value = currentLang;
+}
+function setLanguage(lang){
+  currentLang = lang;
+  localStorage.setItem('pg_lang', lang);
+  applyTranslations();
+  if(typeof renderAll === 'function') renderAll();
+}
+/* ===================== /i18n ===================== */
+
 let items = [];        // kullanıcının koleksiyonu / istek listesi (owned/wishlist)
 let pendingPhoto = null;
 let lastMainScreen = 'koleksiyon';
