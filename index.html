@@ -2,6 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self' https://open.er-api.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>Prime Garaj — Hot Wheels ve Diecast Koleksiyon Takip Uygulaması</title>
 <meta name="description" content="Prime Garaj, Hot Wheels ve diecast araba koleksiyonunu takip etmen için ücretsiz bir uygulama. Koleksiyon yönetimi, istek listesi, takas listesi, piyasa değeri tahmini ve 10.000'e yakın modelle dolu bir veritabanı içerir.">
@@ -708,6 +709,26 @@ const TRANSLATIONS = {
   }
 };
 let currentLang = localStorage.getItem('pg_lang') || 'tr';
+
+/* ===================== GÜVENLİK: XSS koruması ===================== */
+// Kullanıcının girdiği (veya yedekten içe aktarılan) her metni ekrana basmadan önce
+// HTML olarak yorumlanmasını engeller — böylece biri kötü niyetli bir model adı/not/
+// yedek dosyası ile kod çalıştıramaz.
+function escapeHtml(str){
+  if(str === null || str === undefined) return '';
+  return String(str).replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[c]));
+}
+// Fotoğraf alanı sadece güvenli veri URI'lerine (data:image/...) izin verir;
+// başka bir şema (javascript:, http yönlendirmesi vb.) varsa reddedilir.
+function sanitizePhoto(photo){
+  if(typeof photo !== 'string') return null;
+  if(/^data:image\/(png|jpe?g|webp|gif);base64,/i.test(photo)) return photo;
+  return null;
+}
+/* ===================== /GÜVENLİK ===================== */
+
 
 function applyTranslations(){
   const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.tr;
@@ -10883,21 +10904,22 @@ function cardHTML(v){
           <div class="label" style="color:var(--text-dim)">Değer girilmedi</div>
         </div>`;
   const tagsRow = (v.tags && v.tags.length) ? `
-        <div class="tags-row">${v.tags.map(t=>`<span class="tag-chip">${t}</span>`).join('')}</div>` : '';
+        <div class="tags-row">${v.tags.map(t=>`<span class="tag-chip">${escapeHtml(t)}</span>`).join('')}</div>` : '';
   const isSelected = compareSelection.includes(v.id);
   const topLeftIcon = compareMode
     ? `<div class="compare-check ${isSelected?'selected':''}" onclick="toggleCompareSelect('${v.id}')">${isSelected?'✓':''}</div>`
     : `<div class="fav-star ${v.favorite?'active':''}" onclick="toggleFavorite('${v.id}')">${v.favorite?'★':'☆'}</div>`;
+  const safePhoto = sanitizePhoto(v.photo);
   return `
     <div class="vcard ${isSelected?'compare-selected':''}">
       ${topLeftIcon}
       ${compareMode ? '' : `<div class="del" onclick="deleteItem('${v.id}')">✕</div>`}
-      <div class="photo" style="${v.photo?`background-image:url('${v.photo}')`:''}">${v.photo?'':'Fotoğraf yok'}</div>
+      <div class="photo" style="${safePhoto?`background-image:url('${safePhoto}')`:''}">${safePhoto?'':'Fotoğraf yok'}</div>
       <div class="body">
         <div class="name-row">
           <div>
-            <div class="name">${v.name}</div>
-            <div class="meta">${v.brand}${v.series?' · '+v.series:''}${v.year?' · '+v.year:''}${v.color?' · '+v.color:''}</div>
+            <div class="name">${escapeHtml(v.name)}</div>
+            <div class="meta">${escapeHtml(v.brand)}${v.series?' · '+escapeHtml(v.series):''}${v.year?' · '+escapeHtml(v.year):''}${v.color?' · '+escapeHtml(v.color):''}</div>
           </div>
         </div>
         <div class="badges"><span class="badge ${v.rarity}">${badgeLabel(v.rarity)}</span></div>
@@ -11107,7 +11129,7 @@ function saveCustom(){
         brand, name, series, year: year?Number(year):null, color,
         rarity, purchasePrice: price?Number(price):null,
         marketValue: newMarketValue,
-        status, photo: pendingPhoto, tags
+        status, photo: sanitizePhoto(pendingPhoto), tags
       });
     }
   } else {
@@ -11118,7 +11140,7 @@ function saveCustom(){
       brand, name, series, year: year?Number(year):null, color,
       rarity, purchasePrice: price?Number(price):null,
       marketValue: marketValue?Number(marketValue):null,
-      status, photo: pendingPhoto, tags, favorite:false,
+      status, photo: sanitizePhoto(pendingPhoto), tags, favorite:false,
       dateAdded: new Date().toISOString(), priceHistory
     });
   }
@@ -11173,7 +11195,7 @@ function renderHistory(){
           <div>
             <div class="label">${new Date(h.date).toLocaleDateString('tr-TR', {day:'numeric', month:'long', year:'numeric'})}</div>
             <div class="amount">₺${h.amount.toLocaleString('tr-TR')}</div>
-            ${h.note ? `<div class="meta" style="margin-top:2px">${h.note}</div>` : ''}
+            ${h.note ? `<div class="meta" style="margin-top:2px">${escapeHtml(h.note)}</div>` : ''}
           </div>
           ${diffHtml}
         </div>
@@ -11265,23 +11287,24 @@ function openCompare(){
   if(!a || !b) return;
   const valA = itemValue(a), valB = itemValue(b);
   const rows = [
-    ['Marka', a.brand, b.brand],
-    ['Seri', a.series||'—', b.series||'—'],
+    ['Marka', escapeHtml(a.brand), escapeHtml(b.brand)],
+    ['Seri', escapeHtml(a.series)||'—', escapeHtml(b.series)||'—'],
     ['Yıl', a.year||'—', b.year||'—'],
-    ['Renk', a.color||'—', b.color||'—'],
+    ['Renk', escapeHtml(a.color)||'—', escapeHtml(b.color)||'—'],
     ['Nadirlik', badgeLabel(a.rarity), badgeLabel(b.rarity)],
     ['Alış Fiyatı', a.purchasePrice?'₺'+a.purchasePrice.toLocaleString('tr-TR'):'—', b.purchasePrice?'₺'+b.purchasePrice.toLocaleString('tr-TR'):'—'],
     ['Güncel Değer', valA?'₺'+valA.amount.toLocaleString('tr-TR'):'—', valB?'₺'+valB.amount.toLocaleString('tr-TR'):'—'],
   ];
+  const photoA = sanitizePhoto(a.photo), photoB = sanitizePhoto(b.photo);
   document.getElementById('compareContent').innerHTML = `
     <div class="compare-row">
       <div class="compare-col">
-        <div class="photo" style="height:100px; border-radius:12px; ${a.photo?`background-image:url('${a.photo}')`:''}"></div>
-        <div class="name" style="margin-top:8px; font-size:14px;">${a.name}</div>
+        <div class="photo" style="height:100px; border-radius:12px; ${photoA?`background-image:url('${photoA}')`:''}"></div>
+        <div class="name" style="margin-top:8px; font-size:14px;">${escapeHtml(a.name)}</div>
       </div>
       <div class="compare-col">
-        <div class="photo" style="height:100px; border-radius:12px; ${b.photo?`background-image:url('${b.photo}')`:''}"></div>
-        <div class="name" style="margin-top:8px; font-size:14px;">${b.name}</div>
+        <div class="photo" style="height:100px; border-radius:12px; ${photoB?`background-image:url('${photoB}')`:''}"></div>
+        <div class="name" style="margin-top:8px; font-size:14px;">${escapeHtml(b.name)}</div>
       </div>
     </div>
     <div class="compare-table">
@@ -11400,8 +11423,8 @@ function renderPanel(){
         <div class="body" style="padding:12px 15px; display:flex; align-items:center; gap:12px;">
           <div style="font-family:'Rajdhani',sans-serif; font-weight:700; font-size:18px; color:var(--amber); width:22px;">#${i+1}</div>
           <div style="flex:1;">
-            <div class="name" style="font-size:15px;">${x.item.name}</div>
-            <div class="meta">${x.item.brand}</div>
+            <div class="name" style="font-size:15px;">${escapeHtml(x.item.name)}</div>
+            <div class="meta">${escapeHtml(x.item.brand)}</div>
           </div>
           <div class="amount" style="font-size:15px;">₺${x.val.amount.toLocaleString('tr-TR')}</div>
         </div>
@@ -11422,7 +11445,7 @@ function renderPanel(){
   const maxB = Math.max(1, ...Object.values(brandCounts));
   document.getElementById('brandBars').innerHTML = Object.keys(brandCounts).length ? Object.entries(brandCounts).map(([b,c])=>`
     <div class="bar-row">
-      <div class="bar-label"><span>${b}</span><span>${c}</span></div>
+      <div class="bar-label"><span>${escapeHtml(b)}</span><span>${c}</span></div>
       <div class="bar-track"><div class="bar-fill" style="width:${(c/maxB)*100}%;background:var(--amber)"></div></div>
     </div>`).join('') : `<div class="hint">Henüz veri yok.</div>`;
 }
@@ -11477,8 +11500,8 @@ function renderSorList(){
       <div class="body" style="padding-top:15px">
         <div class="name-row">
           <div>
-            <div class="name">${v.name}</div>
-            <div class="meta">${v.brand}${v.series?' · '+v.series:''}${v.year?' · '+v.year:''}${v.color?' · '+v.color:''}</div>
+            <div class="name">${escapeHtml(v.name)}</div>
+            <div class="meta">${escapeHtml(v.brand)}${v.series?' · '+escapeHtml(v.series):''}${v.year?' · '+escapeHtml(v.year):''}${v.color?' · '+escapeHtml(v.color):''}</div>
           </div>
         </div>
         <button class="btn small" style="margin-top:10px" onclick="askClaudeForItem('${v.id}')">💬 Bu Modelin Fiyatını Sor</button>
@@ -11510,6 +11533,12 @@ function exportBackup(){
 function importBackup(event){
   const file = event.target.files[0];
   if(!file) return;
+  // Çok büyük / şüpheli dosyaları baştan reddet (10 MB üstü normal bir yedek olamaz)
+  if(file.size > 10 * 1024 * 1024){
+    alert('Bu dosya çok büyük, geçerli bir Prime Garaj yedeği gibi görünmüyor.');
+    event.target.value = '';
+    return;
+  }
   const reader = new FileReader();
   reader.onload = function(e){
     try{
@@ -11518,22 +11547,57 @@ function importBackup(event){
         alert('Bu dosya geçerli bir Prime Garaj yedeği gibi görünmüyor.');
         return;
       }
+      // Her kaydı temizleyip beklenen alanlara indirger — fazladan/şüpheli
+      // alanlar (fonksiyon, prototip kirliliği vb.) içeri alınmaz.
+      const cleanItems = data.items.map(raw=>{
+        if(!raw || typeof raw !== 'object') return null;
+        const id = (typeof raw.id==='string' && raw.id) ? raw.id.slice(0,64) : (Date.now().toString(36)+Math.random().toString(36).slice(2,6));
+        const brand = String(raw.brand||'').slice(0,80);
+        const name = String(raw.name||'').slice(0,120);
+        if(!brand || !name) return null;
+        const status = ['owned','wishlist','trade'].includes(raw.status) ? raw.status : 'owned';
+        const rarity = ['Normal','TH','STH','Chase','Premium'].includes(raw.rarity) ? raw.rarity : 'Normal';
+        const tags = Array.isArray(raw.tags) ? raw.tags.map(t=>String(t).slice(0,30)).slice(0,15) : [];
+        const priceHistory = Array.isArray(raw.priceHistory) ? raw.priceHistory
+          .filter(h=>h && typeof h==='object' && !isNaN(Number(h.amount)))
+          .map(h=>({date:String(h.date||'').slice(0,10), amount:Number(h.amount), note:String(h.note||'').slice(0,120)}))
+          .slice(0,200) : [];
+        return {
+          id, brand, name,
+          series: String(raw.series||'').slice(0,80),
+          year: raw.year ? Number(raw.year) || null : null,
+          color: String(raw.color||'').slice(0,40),
+          rarity, status,
+          purchasePrice: raw.purchasePrice ? Number(raw.purchasePrice) || null : null,
+          marketValue: raw.marketValue ? Number(raw.marketValue) || null : null,
+          photo: sanitizePhoto(raw.photo),
+          tags, favorite: !!raw.favorite,
+          dateAdded: (typeof raw.dateAdded==='string') ? raw.dateAdded : new Date().toISOString(),
+          priceHistory
+        };
+      }).filter(Boolean);
+
+      if(cleanItems.length===0){
+        alert('Dosyada geçerli bir model bulunamadı.');
+        return;
+      }
+
       const mode = confirm(
-        `${data.items.length} model bulundu.\n\n` +
+        `${cleanItems.length} model bulundu.\n\n` +
         `TAMAM: Mevcut koleksiyonunla birleştir (üzerine eklenir)\n` +
         `İPTAL: Önce her şeyi sil, sonra bu yedeği yükle`
       );
       if(mode){
         // Birleştir: aynı id'ler varsa çakışmasın diye yeni id ver
         const existingIds = new Set(items.map(i=>i.id));
-        data.items.forEach(it=>{
+        cleanItems.forEach(it=>{
           if(existingIds.has(it.id)){
             it.id = Date.now().toString(36)+Math.random().toString(36).slice(2,6);
           }
           items.push(it);
         });
       } else {
-        items = data.items;
+        items = cleanItems;
       }
       persistItems();
       renderAll();
