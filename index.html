@@ -69,6 +69,58 @@ html[data-theme="light"]{
   --good:#2f9955;
   --border:#ddd9d0;
 }
+html[data-theme="red"]{
+  --bg:#15100f;
+  --surface:#1f1717;
+  --surface-2:#291d1d;
+  --amber:#e0392f;
+  --teal:#e0392f;
+  --purple:#ff6b5c;
+  --text:#f5eeee;
+  --text-dim:#a88c8c;
+  --danger:#ff5040;
+  --good:#5fbf80;
+  --border:#3a2626;
+}
+html[data-theme="blue"]{
+  --bg:#0e1420;
+  --surface:#161f2e;
+  --surface-2:#1e2a3d;
+  --amber:#3aa0e0;
+  --teal:#3aa0e0;
+  --purple:#8fd6ff;
+  --text:#eef4fb;
+  --text-dim:#8ea3bc;
+  --danger:#e2574c;
+  --good:#5fbf80;
+  --border:#26344a;
+}
+html[data-theme="green"]{
+  --bg:#0f1712;
+  --surface:#17211a;
+  --surface-2:#1e2c22;
+  --amber:#4fbf6b;
+  --teal:#4fbf6b;
+  --purple:#8fe0a3;
+  --text:#eef7f0;
+  --text-dim:#8fac97;
+  --danger:#e2574c;
+  --good:#4fbf6b;
+  --border:#28392e;
+}
+html[data-theme="purple"]{
+  --bg:#150f1c;
+  --surface:#1f1729;
+  --surface-2:#291f36;
+  --amber:#a373e0;
+  --teal:#a373e0;
+  --purple:#c79bff;
+  --text:#f2eefb;
+  --text-dim:#a091b3;
+  --danger:#e2574c;
+  --good:#5fbf80;
+  --border:#332944;
+}
 *{box-sizing:border-box; margin:0; padding:0;}
 body{ transition:background-color .2s ease, color .2s ease; }
 body{
@@ -370,11 +422,15 @@ nav.bottom button svg{ width:17px; height:17px; }
       </select>
     </div>
     <div class="theme-row">
-      <span class="lbl2" data-i18n="light_theme">🌓 Açık Tema</span>
-      <label class="switch">
-        <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
-        <span class="slider"></span>
-      </label>
+      <span class="lbl2" data-i18n="light_theme">🎨 Renk Teması</span>
+      <select id="themeSelect" onchange="setTheme(this.value)" style="background:var(--surface-2); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-family:'Inter',sans-serif;">
+        <option value="dark" data-i18n="theme_dark">🌑 Koyu (Varsayılan)</option>
+        <option value="light" data-i18n="theme_light">☀️ Açık</option>
+        <option value="red" data-i18n="theme_red">🔴 Kırmızı</option>
+        <option value="blue" data-i18n="theme_blue">🔵 Mavi</option>
+        <option value="green" data-i18n="theme_green">🟢 Yeşil</option>
+        <option value="purple" data-i18n="theme_purple">🟣 Mor</option>
+      </select>
     </div>
     <div class="stat-grid">
       <div class="stat-card"><div class="num" id="statCount">0</div><div class="lbl" data-i18n="stat_in_collection">Koleksiyonda</div></div>
@@ -501,7 +557,8 @@ const TRANSLATIONS = {
     hint_marketvalue:"Bu modelin gerçek güncel değerini biliyorsan (eBay, hobiDB, ilan sitelerinden) buraya yaz — uygulama her zaman bunu formül tahminine tercih eder.",
     lbl_tags:"Etiketler — opsiyonel, virgülle ayır", ph_tags:"Örn: Rafta, Kutulu, Nadir",
     btn_save:"Kaydet",
-    lang_label:"🌐 Dil", light_theme:"🌓 Açık Tema",
+    lang_label:"🌐 Dil", light_theme:"🎨 Renk Teması",
+    theme_dark:"🌑 Koyu (Varsayılan)", theme_light:"☀️ Açık", theme_red:"🔴 Kırmızı", theme_blue:"🔵 Mavi", theme_green:"🟢 Yeşil", theme_purple:"🟣 Mor",
     stat_in_collection:"Koleksiyonda", stat_est_value:"Tahmini Değer", stat_wishlist:"İstek Listesi", stat_rare:"Nadir Parça (TH/STH/Chase)",
     section_badges:"Rozetler / Başarımlar", section_top5:"En Değerli 5", section_rarity_dist:"Nadirlik Dağılımı", section_brand_dist:"Marka Dağılımı",
     disclaimer_value:"Değer tahminleri, girdiğin alış fiyatı ve nadirlik tipine göre kabaca hesaplanan hobici tahminleridir; gerçek koleksiyoncu piyasasını (eBay, hobiDB vb.) yansıtmaz. Belirli bir parçanın güncel fiyatını öğrenmek istersen sohbette benden araştırmamı isteyebilirsin.",
@@ -533,7 +590,8 @@ const TRANSLATIONS = {
     hint_marketvalue:"If you know this model's real current value (from eBay, hobbyDB, listings), enter it here — the app always prefers it over the formula estimate.",
     lbl_tags:"Tags — optional, comma separated", ph_tags:"e.g. On shelf, Boxed, Rare",
     btn_save:"Save",
-    lang_label:"🌐 Language", light_theme:"🌓 Light Theme",
+    lang_label:"🌐 Language", light_theme:"🎨 Color Theme",
+    theme_dark:"🌑 Dark (Default)", theme_light:"☀️ Light", theme_red:"🔴 Red", theme_blue:"🔵 Blue", theme_green:"🟢 Green", theme_purple:"🟣 Purple",
     stat_in_collection:"In Collection", stat_est_value:"Estimated Value", stat_wishlist:"Wishlist", stat_rare:"Rare Items (TH/STH/Chase)",
     section_badges:"Badges / Achievements", section_top5:"Top 5 Most Valuable", section_rarity_dist:"Rarity Distribution", section_brand_dist:"Brand Distribution",
     disclaimer_value:"Value estimates are rough hobbyist guesses based on your purchase price and rarity type; they don't reflect the real collector market (eBay, hobbyDB, etc.). Ask me in chat to look up a specific item's current price if you want.",
@@ -565,7 +623,8 @@ const TRANSLATIONS = {
     hint_marketvalue:"Wenn du den echten aktuellen Wert dieses Modells kennst (eBay, hobbyDB, Anzeigen), trag ihn hier ein — die App bevorzugt ihn immer gegenüber der Formel-Schätzung.",
     lbl_tags:"Tags — optional, mit Komma trennen", ph_tags:"z.B. Im Regal, Originalverpackt, Selten",
     btn_save:"Speichern",
-    lang_label:"🌐 Sprache", light_theme:"🌓 Helles Design",
+    lang_label:"🌐 Sprache", light_theme:"🎨 Farbthema",
+    theme_dark:"🌑 Dunkel (Standard)", theme_light:"☀️ Hell", theme_red:"🔴 Rot", theme_blue:"🔵 Blau", theme_green:"🟢 Grün", theme_purple:"🟣 Lila",
     stat_in_collection:"In Sammlung", stat_est_value:"Geschätzter Wert", stat_wishlist:"Wunschliste", stat_rare:"Seltene Teile (TH/STH/Chase)",
     section_badges:"Abzeichen / Erfolge", section_top5:"Top 5 Wertvollste", section_rarity_dist:"Seltenheitsverteilung", section_brand_dist:"Markenverteilung",
     disclaimer_value:"Wertschätzungen sind grobe Hobbyisten-Schätzungen basierend auf Kaufpreis und Seltenheitstyp; sie spiegeln nicht den echten Sammlermarkt (eBay, hobbyDB usw.) wider. Frag mich im Chat, wenn du den aktuellen Preis eines bestimmten Teils erfahren willst.",
@@ -597,7 +656,8 @@ const TRANSLATIONS = {
     hint_marketvalue:"Si tu connais la vraie valeur actuelle de ce modèle (eBay, hobbyDB, annonces), indique-la ici — l'appli la préfère toujours à l'estimation par formule.",
     lbl_tags:"Étiquettes — facultatif, séparées par des virgules", ph_tags:"ex: En vitrine, En boîte, Rare",
     btn_save:"Enregistrer",
-    lang_label:"🌐 Langue", light_theme:"🌓 Thème clair",
+    lang_label:"🌐 Langue", light_theme:"🎨 Thème de couleur",
+    theme_dark:"🌑 Sombre (Défaut)", theme_light:"☀️ Clair", theme_red:"🔴 Rouge", theme_blue:"🔵 Bleu", theme_green:"🟢 Vert", theme_purple:"🟣 Violet",
     stat_in_collection:"Dans la collection", stat_est_value:"Valeur estimée", stat_wishlist:"Liste de souhaits", stat_rare:"Pièces rares (TH/STH/Chase)",
     section_badges:"Badges / Succès", section_top5:"Top 5 les plus précieux", section_rarity_dist:"Répartition par rareté", section_brand_dist:"Répartition par marque",
     disclaimer_value:"Les estimations de valeur sont des approximations basées sur ton prix d'achat et le type de rareté ; elles ne reflètent pas le vrai marché des collectionneurs (eBay, hobbyDB, etc.). Demande-moi dans le chat si tu veux connaître le prix actuel d'une pièce précise.",
@@ -629,7 +689,8 @@ const TRANSLATIONS = {
     hint_marketvalue:"إذا كنت تعرف القيمة الحالية الحقيقية لهذا الموديل (من eBay أو hobbyDB أو الإعلانات)، اكتبها هنا — التطبيق يفضلها دائمًا على التقدير بالصيغة الحسابية.",
     lbl_tags:"الوسوم — اختياري، افصل بفاصلة", ph_tags:"مثال: على الرف، في العلبة، نادر",
     btn_save:"حفظ",
-    lang_label:"🌐 اللغة", light_theme:"🌓 المظهر الفاتح",
+    lang_label:"🌐 اللغة", light_theme:"🎨 نمط الألوان",
+    theme_dark:"🌑 داكن (افتراضي)", theme_light:"☀️ فاتح", theme_red:"🔴 أحمر", theme_blue:"🔵 أزرق", theme_green:"🟢 أخضر", theme_purple:"🟣 بنفسجي",
     stat_in_collection:"في المجموعة", stat_est_value:"القيمة التقديرية", stat_wishlist:"قائمة الرغبات", stat_rare:"قطع نادرة (TH/STH/Chase)",
     section_badges:"الأوسمة / الإنجازات", section_top5:"أعلى 5 قيمة", section_rarity_dist:"توزيع الندرة", section_brand_dist:"توزيع العلامات التجارية",
     disclaimer_value:"تقديرات القيمة هي تخمينات تقريبية للهواة بناءً على سعر الشراء ونوع الندرة؛ ولا تعكس سوق الهواة الحقيقي (eBay، hobbyDB، إلخ). يمكنك سؤالي في المحادثة لمعرفة السعر الحالي لقطعة معينة.",
@@ -661,7 +722,8 @@ const TRANSLATIONS = {
     hint_marketvalue:"如果你知道这个模型的真实当前价值(来自eBay、hobbyDB或商品页面),请在此填写——应用会始终优先使用它而非公式估算。",
     lbl_tags:"标签 — 可选,用逗号分隔", ph_tags:"例如 在架上,原盒,稀有",
     btn_save:"保存",
-    lang_label:"🌐 语言", light_theme:"🌓 浅色主题",
+    lang_label:"🌐 语言", light_theme:"🎨 配色主题",
+    theme_dark:"🌑 深色(默认)", theme_light:"☀️ 浅色", theme_red:"🔴 红色", theme_blue:"🔵 蓝色", theme_green:"🟢 绿色", theme_purple:"🟣 紫色",
     stat_in_collection:"收藏中", stat_est_value:"估计价值", stat_wishlist:"心愿单", stat_rare:"稀有款(TH/STH/Chase)",
     section_badges:"徽章/成就", section_top5:"最有价值的5件", section_rarity_dist:"稀有度分布", section_brand_dist:"品牌分布",
     disclaimer_value:"价值估算是根据你输入的购买价格和稀有类型粗略计算出的爱好者估值;并不反映真实的收藏市场行情(eBay、hobbyDB等)。如果你想了解某件特定藏品的当前价格,可以在聊天中让我帮你查一下。",
@@ -693,7 +755,8 @@ const TRANSLATIONS = {
     hint_marketvalue:"Если ты знаешь реальную текущую стоимость этой модели (eBay, hobbyDB, объявления), укажи её здесь — приложение всегда предпочтёт её формуле оценки.",
     lbl_tags:"Теги — необязательно, через запятую", ph_tags:"напр. На полке, В коробке, Редкая",
     btn_save:"Сохранить",
-    lang_label:"🌐 Язык", light_theme:"🌓 Светлая тема",
+    lang_label:"🌐 Язык", light_theme:"🎨 Цветовая тема",
+    theme_dark:"🌑 Тёмная (по умолч.)", theme_light:"☀️ Светлая", theme_red:"🔴 Красная", theme_blue:"🔵 Синяя", theme_green:"🟢 Зелёная", theme_purple:"🟣 Фиолетовая",
     stat_in_collection:"В коллекции", stat_est_value:"Оценочная стоимость", stat_wishlist:"Список желаний", stat_rare:"Редкие экземпляры (TH/STH/Chase)",
     section_badges:"Значки / Достижения", section_top5:"Топ-5 самых ценных", section_rarity_dist:"Распределение по редкости", section_brand_dist:"Распределение по брендам",
     disclaimer_value:"Оценки стоимости — это грубые любительские прикидки на основе цены покупки и типа редкости; они не отражают реальный рынок коллекционеров (eBay, hobbyDB и т.д.). Спроси меня в чате, если хочешь узнать актуальную цену конкретного экземпляра.",
@@ -11356,13 +11419,15 @@ function deleteItem(id){
 }
 
 /* ---------- TEMA ---------- */
+const VALID_THEMES = ['dark','light','red','blue','green','purple'];
 function applyTheme(theme){
+  if(!VALID_THEMES.includes(theme)) theme = 'dark';
   document.documentElement.setAttribute('data-theme', theme);
-  document.getElementById('themeToggle').checked = (theme==='light');
+  const sel = document.getElementById('themeSelect');
+  if(sel) sel.value = theme;
 }
-function toggleTheme(){
-  const isLight = document.getElementById('themeToggle').checked;
-  const theme = isLight ? 'light' : 'dark';
+function setTheme(theme){
+  if(!VALID_THEMES.includes(theme)) theme = 'dark';
   localStorage.setItem('primegaraj_theme', theme);
   applyTheme(theme);
 }
@@ -11373,22 +11438,51 @@ function loadTheme(){
 
 /* ---------- ROZETLER / BAŞARIMLAR ---------- */
 const ACHIEVEMENTS = [
+  // -- Koleksiyon büyüklüğü --
   {id:'first', icon:'🚗', title:'İlk Adım', desc:'İlk modelini ekle', check: o => o.length>=1},
   {id:'ten', icon:'🏁', title:'Isınıyor', desc:'10 model biriktir', check: o => o.length>=10},
+  {id:'twentyfive', icon:'🚙', title:'Ciddi İşler', desc:'25 model biriktir', check: o => o.length>=25},
   {id:'fifty', icon:'🏆', title:'Koleksiyoner', desc:'50 model biriktir', check: o => o.length>=50},
   {id:'hundred', icon:'👑', title:'Garaj Kralı', desc:'100 model biriktir', check: o => o.length>=100},
+  {id:'twohundred', icon:'🏛️', title:'Efsane Garaj', desc:'200 model biriktir', check: o => o.length>=200},
+
+  // -- Nadirlik --
   {id:'rare', icon:'💎', title:'Şanslı Avcı', desc:'Bir TH/STH/Chase parça bul', check: o => o.some(i=>['TH','STH','Chase'].includes(i.rarity))},
-  {id:'fivebrand', icon:'🏷️', title:'Marka Gezgini', desc:"5 farklı markadan model topla", check: o => new Set(o.map(i=>i.brand)).size>=5},
+  {id:'sth3', icon:'🌟', title:'STH Ustası', desc:'3 adet Super Treasure Hunt topla', check: o => o.filter(i=>i.rarity==='STH').length>=3},
+  {id:'chase5', icon:'🎯', title:'Chase Avcısı', desc:'5 adet Chase parça topla', check: o => o.filter(i=>i.rarity==='Chase').length>=5},
+  {id:'allrarity', icon:'🧩', title:'Tam Set', desc:'Her nadirlik tipinden (Normal, TH, STH, Chase, Premium) en az bir tane sahip ol', check: o => ['Normal','TH','STH','Chase','Premium'].every(r=>o.some(i=>i.rarity===r))},
+
+  // -- Çeşitlilik --
+  {id:'fivebrand', icon:'🏷️', title:'Marka Gezgini', desc:'5 farklı markadan model topla', check: o => new Set(o.map(i=>i.brand)).size>=5},
+  {id:'tenbrand', icon:'🌍', title:'Marka Koleksiyoncusu', desc:'10 farklı markadan model topla', check: o => new Set(o.map(i=>i.brand)).size>=10},
+  {id:'fiveseries', icon:'📚', title:'Seri Avcısı', desc:'5 farklı seriden model topla', check: o => new Set(o.filter(i=>i.series).map(i=>i.series)).size>=5},
+  {id:'colorful', icon:'🌈', title:'Renk Cümbüşü', desc:'5 farklı renkte model topla', check: o => new Set(o.filter(i=>i.color).map(i=>i.color.toLocaleLowerCase('tr'))).size>=5},
+
+  // -- Kişiselleştirme / kullanım --
   {id:'photo', icon:'📸', title:'Fotoğrafçı', desc:'İlk fotoğraflı modelini ekle', check: o => o.some(i=>i.photo)},
+  {id:'tenphoto', icon:'🖼️', title:'Galeri Sahibi', desc:'10 fotoğraflı model ekle', check: o => o.filter(i=>i.photo).length>=10},
   {id:'fav', icon:'⭐', title:'Favorim Bu', desc:'Bir modeli favorile', check: o => o.some(i=>i.favorite)},
+  {id:'fivefav', icon:'✨', title:'Gözdelerim', desc:'5 modeli favorile', check: o => o.filter(i=>i.favorite).length>=5},
   {id:'tagged', icon:'🔖', title:'Düzenli Koleksiyoner', desc:'Bir modele etiket ekle', check: o => o.some(i=>i.tags && i.tags.length>0)},
+  {id:'tentag', icon:'🗂️', title:'Arşiv Ustası', desc:'10 modele etiket ekle', check: o => o.filter(i=>i.tags && i.tags.length>0).length>=10},
+
+  // -- Değer --
   {id:'value', icon:'💰', title:'Değerli Garaj', desc:'Toplam değer 1.000₺ üstü', check: (o,total) => total>=1000},
+  {id:'value5000', icon:'💵', title:'Küçük Servet', desc:'Toplam değer 5.000₺ üstü', check: (o,total) => total>=5000},
+  {id:'value10000', icon:'🏦', title:'Yatırımcı Garaj', desc:'Toplam değer 10.000₺ üstü', check: (o,total) => total>=10000},
+
+  // -- Zaman / nostalji --
+  {id:'oldcar', icon:'🕰️', title:'Nostalji Avcısı', desc:'2000 öncesi bir model topla', check: o => o.some(i=>i.year && i.year<2000)},
+  {id:'newcar', icon:'🆕', title:'Güncel Takipçi', desc:'Bu yıl çıkmış bir model topla', check: o => o.some(i=>i.year===new Date().getFullYear())},
+
+  // -- İstek listesi --
+  {id:'wishlistbig', icon:'📝', title:'Hayalperest', desc:'İstek listende 10 model olsun', check: (o,total,w) => (w||[]).length>=10},
 ];
 
-function renderAchievements(owned, totalValue){
+function renderAchievements(owned, totalValue, wishlist){
   const grid = document.getElementById('achievementGrid');
   grid.innerHTML = ACHIEVEMENTS.map(a=>{
-    const unlocked = a.check(owned, totalValue);
+    const unlocked = a.check(owned, totalValue, wishlist);
     return `
       <div class="achievement ${unlocked?'unlocked':''}">
         <div class="ach-icon">${unlocked ? a.icon : '🔒'}</div>
@@ -11411,7 +11505,7 @@ function renderPanel(){
   document.getElementById('statWishlist').innerText = wishlist.length;
   document.getElementById('statRare').innerText = rareCount;
 
-  renderAchievements(owned, totalValue);
+  renderAchievements(owned, totalValue, wishlist);
 
   const withValue = owned.map(i=>({item:i, val:itemValue(i)})).filter(x=>x.val).sort((a,b)=>b.val.amount-a.val.amount).slice(0,5);
   const topFiveEl = document.getElementById('topFiveList');
